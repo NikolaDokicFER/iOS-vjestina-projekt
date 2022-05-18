@@ -14,6 +14,10 @@
 		204B97FE282BC4FA00E92E22 /* WeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 204B97FC282BC4FA00E92E22 /* WeatherApp.xcdatamodeld */; };
 		204B9800282BC4FE00E92E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 204B97FF282BC4FE00E92E22 /* Assets.xcassets */; };
 		204B9803282BC4FE00E92E22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 204B9801282BC4FE00E92E22 /* LaunchScreen.storyboard */; };
+		287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E62834FF26009EA997 /* HomeViewController.swift */; };
+		287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */; };
+		287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */; };
+		287ED8EE2834FFB7009EA997 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 287ED8ED2834FFB7009EA997 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,9 @@
 		204B97FF282BC4FE00E92E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		204B9802282BC4FE00E92E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		204B9804282BC4FE00E92E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		287ED8E62834FF26009EA997 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
+		287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForcatsTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				287ED8EE2834FFB7009EA997 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +66,7 @@
 		204B97F2282BC4FA00E92E22 /* WeatherApp */ = {
 			isa = PBXGroup;
 			children = (
+				287ED8B32833BB9C009EA997 /* ViewControllers */,
 				204B97F3282BC4FA00E92E22 /* AppDelegate.swift */,
 				204B97F5282BC4FA00E92E22 /* SceneDelegate.swift */,
 				204B97F7282BC4FA00E92E22 /* ViewController.swift */,
@@ -68,6 +77,24 @@
 				204B97FC282BC4FA00E92E22 /* WeatherApp.xcdatamodeld */,
 			);
 			path = WeatherApp;
+			sourceTree = "<group>";
+		};
+		287ED8B32833BB9C009EA997 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				287ED8B42833BBA9009EA997 /* HomeViewController */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		287ED8B42833BBA9009EA997 /* HomeViewController */ = {
+			isa = PBXGroup;
+			children = (
+				287ED8E62834FF26009EA997 /* HomeViewController.swift */,
+				287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */,
+				287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */,
+			);
+			path = HomeViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,6 +113,9 @@
 			dependencies = (
 			);
 			name = WeatherApp;
+			packageProductDependencies = (
+				287ED8ED2834FFB7009EA997 /* SnapKit */,
+			);
 			productName = WeatherApp;
 			productReference = 204B97F0282BC4FA00E92E22 /* WeatherApp.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +144,9 @@
 				Base,
 			);
 			mainGroup = 204B97E7282BC4FA00E92E22;
+			packageReferences = (
+				287ED8EC2834FFB7009EA997 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = 204B97F1282BC4FA00E92E22 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,6 +174,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */,
+				287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */,
+				287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */,
 				204B97FE282BC4FA00E92E22 /* WeatherApp.xcdatamodeld in Sources */,
 				204B97F8282BC4FA00E92E22 /* ViewController.swift in Sources */,
 				204B97F4282BC4FA00E92E22 /* AppDelegate.swift in Sources */,
@@ -297,6 +333,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -325,6 +362,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -362,6 +400,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		287ED8EC2834FFB7009EA997 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		287ED8ED2834FFB7009EA997 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 287ED8EC2834FFB7009EA997 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		204B97FC282BC4FA00E92E22 /* WeatherApp.xcdatamodeld */ = {
