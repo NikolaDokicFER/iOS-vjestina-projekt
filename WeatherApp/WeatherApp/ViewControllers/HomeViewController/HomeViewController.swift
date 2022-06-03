@@ -191,7 +191,7 @@ class HomeViewController: UIViewController {
     private func mainViewConstraints() {
         mainView.snp.makeConstraints({
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(500)
+            $0.height.equalTo(450)
         })
     }
     
