@@ -23,12 +23,61 @@ class HomeViewController: UIViewController {
     //forcats buttons
     private var openWeekForcatsButton: UIButton!
     private var closeWeekForcatsButton: UIButton!
+    
+    //network
+    private var networkService = NetworkService()
+    
+    //models
+    private var weatherModel: WeatherModel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        buildViews()
-        buildConstraints()
+//        buildViews()
+//        buildConstraints()
+        
+        networkService.getWeatherData(cityLat: 45.8131, cityLon: -15.9775, completionHandler: { (result: Result<WeatherModel, RequestError>) in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let value):
+                DispatchQueue.main.async {
+                    self.weatherModel = value
+
+                    //print(self.weatherModel)
+
+                    self.buildViews()
+                    self.buildConstraints()
+                    
+                    //self.collectionView.dataSource = self
+                }
+            }
+        })
+        
+//
+//        //Adrian
+//        //to nam sluzi da spremimo lokacije grada, npr za Zagreb
+//        //das ovoj funkciji ime grada (malim slovima) i ona fetcha s api-a njegove lokacije i onda bi to trebalo sve pospremiti u bazu
+//        networkService.getLocation(cityName: "zagreb", completionHandler: { (result: Result<CityModel, RequestError>) in
+//            switch result {
+//            case .failure(let error):
+//                print(error)
+//            case .success(let value):
+//                DispatchQueue.main.async {
+//
+//                    //tuj ide kod za spremanje u bazu
+//
+//                    // ove vrijednosti spremas u bazu
+//                    // OBAVEZNO spremiti i ime grada malim slovima, npr. "zagreb" jer prek toga pristupamo kasnije
+//                    //print(value.coord.lat)
+//                    //print(value.coord.lon)
+//
+//                }
+//            }
+//        })
+//
+        
+        
     }
     
     private func buildViews() {
@@ -67,20 +116,24 @@ class HomeViewController: UIViewController {
     //Nikola
     private func buildMainView() {
         mainView = UIView()
-        mainView.backgroundColor = .systemBlue
+        mainView.backgroundColor = StyleConstants.AppColors.lightBlue
         mainView.layer.cornerRadius = 30
         stackView.addArrangedSubview(mainView)
     }
     
     private func buildDayForcatsView() {
         dayForcatsView = UIView()
-        dayForcatsView.backgroundColor = .systemBlue
+        dayForcatsView.backgroundColor = StyleConstants.AppColors.lightBlue
         stackView.addArrangedSubview(dayForcatsView)
         
         dayAndDateLabel = UILabel()
-        dayAndDateLabel.textColor = .white
-        dayAndDateLabel.font = UIFont(name: "Helvetica Neue Bold", size: 14)
-        dayAndDateLabel.text = "Sunday | Nov 14" //.......
+        dayAndDateLabel.textColor = StyleConstants.AppColors.textColor
+        dayAndDateLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE | MMM dd"
+        let dayOfTheWeekString = dateFormatter.string(from: date)
+        dayAndDateLabel.text = dayOfTheWeekString
         dayForcatsView.addSubview(dayAndDateLabel)
         
         let layout = UICollectionViewFlowLayout()
@@ -99,12 +152,12 @@ class HomeViewController: UIViewController {
     
     private func buildWeekForcatsView() {
         weekForcatsView = UIView()
-        weekForcatsView.backgroundColor = .systemBlue
+        weekForcatsView.backgroundColor = StyleConstants.AppColors.lightBlue
         stackView.addArrangedSubview(weekForcatsView)
         
         weekForcatsLabel = UILabel()
-        weekForcatsLabel.textColor = .white
-        weekForcatsLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        weekForcatsLabel.textColor = StyleConstants.AppColors.textColor
+        weekForcatsLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
         weekForcatsLabel.text = "Forcats for 7 Days"
         weekForcatsView.addSubview(weekForcatsLabel)
         
@@ -121,7 +174,7 @@ class HomeViewController: UIViewController {
     private func buildOpenForcatsButton() {
         openWeekForcatsButton = UIButton()
         openWeekForcatsButton.setTitle("Forcats for 7 Days ▽↓", for: .normal)
-        openWeekForcatsButton.tintColor = .white
+        openWeekForcatsButton.tintColor = StyleConstants.AppColors.textColor
         
         stackView.addArrangedSubview(openWeekForcatsButton)
     }
@@ -129,7 +182,7 @@ class HomeViewController: UIViewController {
     private func buildCloseForcatsButton() {
         closeWeekForcatsButton = UIButton()
         closeWeekForcatsButton.setTitle("Forcats for 7 Days ↑", for: .normal)
-        closeWeekForcatsButton.tintColor = .white
+        closeWeekForcatsButton.tintColor = StyleConstants.AppColors.textColor
         
         stackView.addArrangedSubview(closeWeekForcatsButton)
     }
@@ -156,7 +209,7 @@ class HomeViewController: UIViewController {
     private func mainViewConstraints() {
         mainView.snp.makeConstraints({
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(550)
+            $0.height.equalTo(500)
         })
     }
     
@@ -208,7 +261,6 @@ class HomeViewController: UIViewController {
 //MARK: - Day Forcast - Collection View
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    //cell dimensions
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 70, height: collectionView.frame.height)
     }
@@ -220,7 +272,7 @@ extension HomeViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        7
+        24
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -229,7 +281,7 @@ extension HomeViewController: UICollectionViewDataSource {
             fatalError()
         }
         
-        cell.set(inputThing: indexPath.row)
+        cell.set(inputIndexPath: indexPath.row, inputWeatherModel: weatherModel)
         return cell
     }
 }
@@ -250,7 +302,7 @@ extension HomeViewController: UITableViewDataSource {
             fatalError()
         }
         
-        cell.set(inputThing: indexPath.row)
+        cell.set(inputIndexPath: indexPath.row, inputWeatherModel: weatherModel)
         return cell
     }
 }

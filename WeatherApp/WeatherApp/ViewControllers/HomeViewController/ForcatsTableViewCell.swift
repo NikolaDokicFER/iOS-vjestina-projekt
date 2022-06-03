@@ -8,8 +8,11 @@ class ForcatsTableViewCell: UITableViewCell {
     private var cellView: UIView!
     private var dayLabel: UILabel!
     private var weatherIcon: UIImageView!
-    private var rainProbabilityLabel: UILabel!
+    private var mainDescriptionLabel: UILabel!
     private var tempHLLabel: UILabel!
+    
+    private var weatherIcons = WeatherIcons()
+    private var conversionFunctions = ConversionFunctions()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,26 +27,26 @@ class ForcatsTableViewCell: UITableViewCell {
     
     private func buildCell() {
         cellView = UIView()
-        cellView.backgroundColor = .systemBlue
+        cellView.backgroundColor = StyleConstants.AppColors.lightBlue
         addSubview(cellView)
         
         dayLabel = UILabel()
-        dayLabel.textColor = .white
-        dayLabel.font = UIFont(name: "Helvetica Neue Bold", size: 14)
+        dayLabel.textColor = StyleConstants.AppColors.textColor
+        dayLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
         cellView.addSubview(dayLabel)
         
         weatherIcon = UIImageView()
-        weatherIcon.tintColor = .white
+        weatherIcon.tintColor = StyleConstants.AppColors.weatherIconsColor
         cellView.addSubview(weatherIcon)
         
-        rainProbabilityLabel = UILabel()
-        rainProbabilityLabel.textColor = .white
-        rainProbabilityLabel.font = UIFont(name: "Helvetica Neue", size: 14)
-        cellView.addSubview(rainProbabilityLabel)
+        mainDescriptionLabel = UILabel()
+        mainDescriptionLabel.textColor = StyleConstants.AppColors.textColor
+        mainDescriptionLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
+        cellView.addSubview(mainDescriptionLabel)
         
         tempHLLabel = UILabel()
-        tempHLLabel.textColor = .white
-        tempHLLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        tempHLLabel.textColor = StyleConstants.AppColors.textColor
+        tempHLLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
         cellView.addSubview(tempHLLabel)
     }
     
@@ -57,13 +60,13 @@ class ForcatsTableViewCell: UITableViewCell {
             $0.centerY.equalToSuperview()
         })
         
-        rainProbabilityLabel.snp.makeConstraints({
+        mainDescriptionLabel.snp.makeConstraints({
             $0.centerX.equalToSuperview().offset(1.5*5)
             $0.centerY.equalToSuperview()
         })
         
         weatherIcon.snp.makeConstraints({
-            $0.trailing.equalTo(rainProbabilityLabel.snp.leading).offset(-5)
+            $0.trailing.equalTo(mainDescriptionLabel.snp.leading).offset(-5)
             $0.centerY.equalToSuperview()
         })
         
@@ -73,11 +76,22 @@ class ForcatsTableViewCell: UITableViewCell {
         })
     }
     
-    func set(inputThing: Int) {
-        dayLabel.text = "Sun"
-        weatherIcon.image = UIImage(systemName: "cloud", withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
-        rainProbabilityLabel.text = "74% rain"
-        tempHLLabel.text = "20°/24°"
+    func set(inputIndexPath: Int, inputWeatherModel: WeatherModel) {
+        let date = Calendar.current.date(byAdding: .day, value: inputIndexPath+1, to: Date())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        let dayOfTheWeekString = dateFormatter.string(from: date!)
+        dayLabel.text = dayOfTheWeekString
+        
+        let weatherDayData = inputWeatherModel.daily[inputIndexPath]
+        let systemIcon = weatherIcons.weatherIcon(conditionId: weatherDayData.weather[0].id)
+        weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        mainDescriptionLabel.text = weatherDayData.weather[0].main
+        
+        
+        let min = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.min)
+        let max = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.max)
+        tempHLLabel.text = "\(min)°/\(max)°"
     }
 
 }
