@@ -126,8 +126,7 @@ class MainView: UIView{
         currentWeatherImageView.snp.makeConstraints({
             $0.top.equalTo(pageControl.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(130)
-            $0.height.equalTo(130)
+            $0.width.height.equalTo(130)
         })
         
         currentDateLabel.snp.makeConstraints({
@@ -159,6 +158,7 @@ class MainView: UIView{
         bottomView.snp.makeConstraints(){
             $0.top.equalTo(separatorLine.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 }
