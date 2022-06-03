@@ -8,10 +8,11 @@ class DayCollectionViewCell: UICollectionViewCell {
     private var cellView: UIView!
     private var timeLabel: UILabel!
     private var weatherIcon: UIImageView!
-    private var rainProbabilityLabel: UILabel!
-    private var tempHLLabel: UILabel!
+    private var tempLabel: UILabel!
+    private var mainDescriptionLabel: UILabel!
     
-    //private var someInputModel = SomeModel(results: [])
+    private var weatherIcons = WeatherIcons()
+    private var conversionFunctions = ConversionFunctions()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,27 +27,27 @@ class DayCollectionViewCell: UICollectionViewCell {
     
     func buildCell() {
         cellView = UIView()
-        cellView.backgroundColor = .systemBlue
+        cellView.backgroundColor = .clear
         addSubview(cellView)
         
         timeLabel = UILabel()
-        timeLabel.textColor = .white
-        timeLabel.font = UIFont(name: "Helvetica Neue Bold", size: 14)
+        timeLabel.textColor = StyleConstants.AppColors.textColor
+        timeLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
         cellView.addSubview(timeLabel)
         
         weatherIcon = UIImageView()
-        weatherIcon.tintColor = .white
+        weatherIcon.tintColor = StyleConstants.AppColors.weatherIconsColor
         cellView.addSubview(weatherIcon)
 
-        tempHLLabel = UILabel()
-        tempHLLabel.textColor = .white
-        tempHLLabel.font = UIFont(name: "Helvetica Neue", size: 14)
-        cellView.addSubview(tempHLLabel)
+        mainDescriptionLabel = UILabel()
+        mainDescriptionLabel.textColor = StyleConstants.AppColors.textColor
+        mainDescriptionLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
+        cellView.addSubview(mainDescriptionLabel)
         
-        rainProbabilityLabel = UILabel()
-        rainProbabilityLabel.textColor = .white
-        rainProbabilityLabel.font = UIFont(name: "Helvetica Neue", size: 14)
-        cellView.addSubview(rainProbabilityLabel)
+        tempLabel = UILabel()
+        tempLabel.textColor = StyleConstants.AppColors.textColor
+        tempLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
+        cellView.addSubview(tempLabel)
     }
     
     func buildCellConstraints() {
@@ -64,22 +65,41 @@ class DayCollectionViewCell: UICollectionViewCell {
             $0.centerX.equalToSuperview()
         })
 
-        tempHLLabel.snp.makeConstraints({
-            $0.top.equalTo(cellView.snp.centerY)
+        mainDescriptionLabel.snp.makeConstraints({
+            $0.top.equalTo(cellView.snp.centerY).offset(5)
             $0.centerX.equalToSuperview()
         })
         
-        rainProbabilityLabel.snp.makeConstraints({
+        tempLabel.snp.makeConstraints({
             $0.bottom.equalToSuperview()
             $0.centerX.equalToSuperview()
         })
     }
     
-    func set(inputThing: Int) {
-        timeLabel.text = "10:00"
-        weatherIcon.image = UIImage(systemName: "cloud", withConfiguration: UIImage.SymbolConfiguration(scale: .medium))
-        tempHLLabel.text = "20°/24°"
-        rainProbabilityLabel.text = "74% rain"
+    func set(inputIndexPath: Int, inputWeatherModel: WeatherModel) {
+        
+        if (inputIndexPath == 0) {
+            timeLabel.text = "Now"
+        }
+        else {
+            let currentDate = Date()
+            let hours = (Calendar.current.component(.hour, from: currentDate))
+            var timeStamp = hours + inputIndexPath
+            if (timeStamp >= 24) {
+                timeStamp -= 24
+            }
+            timeLabel.text = "\(timeStamp):00"
+        }
+        
+        let weatherHourData = inputWeatherModel.hourly[inputIndexPath]
+        let systemIcon = weatherIcons.weatherIcon(conditionId: weatherHourData.weather[0].id)
+        weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        
+        mainDescriptionLabel.text = weatherHourData.weather[0].main
+        
+        
+        let temp = conversionFunctions.toCelsius(kelvin: weatherHourData.temp)
+        tempLabel.text = "\(temp)°"
     }
     
 }
