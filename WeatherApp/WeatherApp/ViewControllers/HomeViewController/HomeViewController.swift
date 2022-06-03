@@ -20,10 +20,6 @@ class HomeViewController: UIViewController {
     private var weekForcatsLabel: UILabel!
     private var forcatsTableView: UITableView!
     
-    //forcats buttons
-    private var openWeekForcatsButton: UIButton!
-    private var closeWeekForcatsButton: UIButton!
-    
     //network
     private var networkService = NetworkService()
     
@@ -129,11 +125,13 @@ class HomeViewController: UIViewController {
         dayAndDateLabel = UILabel()
         dayAndDateLabel.textColor = StyleConstants.AppColors.textColor
         dayAndDateLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
+        
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE | MMM dd"
         let dayOfTheWeekString = dateFormatter.string(from: date)
-        dayAndDateLabel.text = dayOfTheWeekString
+        
+        dayAndDateLabel.text = "Forcats for 24 Hours"
         dayForcatsView.addSubview(dayAndDateLabel)
         
         let layout = UICollectionViewFlowLayout()
@@ -169,22 +167,6 @@ class HomeViewController: UIViewController {
         weekForcatsView.addSubview(forcatsTableView)
         
         forcatsTableView.dataSource = self
-    }
-    
-    private func buildOpenForcatsButton() {
-        openWeekForcatsButton = UIButton()
-        openWeekForcatsButton.setTitle("Forcats for 7 Days ▽↓", for: .normal)
-        openWeekForcatsButton.tintColor = StyleConstants.AppColors.textColor
-        
-        stackView.addArrangedSubview(openWeekForcatsButton)
-    }
-    
-    private func buildCloseForcatsButton() {
-        closeWeekForcatsButton = UIButton()
-        closeWeekForcatsButton.setTitle("Forcats for 7 Days ↑", for: .normal)
-        closeWeekForcatsButton.tintColor = StyleConstants.AppColors.textColor
-        
-        stackView.addArrangedSubview(closeWeekForcatsButton)
     }
     
     //MARK: - Constraints

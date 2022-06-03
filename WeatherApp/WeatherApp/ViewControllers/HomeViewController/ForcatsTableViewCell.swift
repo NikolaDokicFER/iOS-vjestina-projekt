@@ -88,7 +88,6 @@ class ForcatsTableViewCell: UITableViewCell {
         weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
         mainDescriptionLabel.text = weatherDayData.weather[0].main
         
-        
         let min = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.min)
         let max = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.max)
         tempHLLabel.text = "\(min)°/\(max)°"
