@@ -8,7 +8,7 @@ class HomeViewController: UIViewController {
     private var stackView: UIStackView!
     
     //Nikola
-    private var mainView: UIView!
+    private var mainView: MainView!
     
     //current day forcats
     private var dayForcatsView: UIView!
@@ -115,7 +115,7 @@ class HomeViewController: UIViewController {
     
     //Nikola
     private func buildMainView() {
-        mainView = UIView()
+        mainView = MainView()
         mainView.backgroundColor = StyleConstants.AppColors.lightBlue
         mainView.layer.cornerRadius = 30
         stackView.addArrangedSubview(mainView)
