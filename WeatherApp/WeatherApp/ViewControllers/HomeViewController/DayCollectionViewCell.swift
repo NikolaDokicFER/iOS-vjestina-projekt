@@ -88,7 +88,16 @@ class DayCollectionViewCell: UICollectionViewCell {
             if (timeStamp >= 24) {
                 timeStamp -= 24
             }
-            timeLabel.text = "\(timeStamp):00"
+            if (timeStamp == 0) {
+                let date = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd"
+                let dayOfTheWeekString = dateFormatter.string(from: date!)
+                timeLabel.text = dayOfTheWeekString
+            }
+            else {
+                timeLabel.text = "\(timeStamp):00"
+            }
         }
         
         let weatherHourData = inputWeatherModel.hourly[inputIndexPath]
@@ -96,7 +105,6 @@ class DayCollectionViewCell: UICollectionViewCell {
         weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
         
         mainDescriptionLabel.text = weatherHourData.weather[0].main
-        
         
         let temp = conversionFunctions.toCelsius(kelvin: weatherHourData.temp)
         tempLabel.text = "\(temp)°"
