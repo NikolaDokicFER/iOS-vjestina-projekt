@@ -14,6 +14,9 @@
 		204B97FE282BC4FA00E92E22 /* WeatherApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 204B97FC282BC4FA00E92E22 /* WeatherApp.xcdatamodeld */; };
 		204B9800282BC4FE00E92E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 204B97FF282BC4FE00E92E22 /* Assets.xcassets */; };
 		204B9803282BC4FE00E92E22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 204B9801282BC4FE00E92E22 /* LaunchScreen.storyboard */; };
+		206BF29328491D0200BA01A8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206BF29228491D0200BA01A8 /* MainView.swift */; };
+		206BF2952849202C00BA01A8 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206BF2942849202C00BA01A8 /* BottomView.swift */; };
+		206BF297284920ED00BA01A8 /* BottomViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 206BF296284920EC00BA01A8 /* BottomViewCell.swift */; };
 		287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E62834FF26009EA997 /* HomeViewController.swift */; };
 		287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */; };
 		287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */; };
@@ -30,6 +33,9 @@
 		204B97FF282BC4FE00E92E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		204B9802282BC4FE00E92E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		204B9804282BC4FE00E92E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		206BF29228491D0200BA01A8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		206BF2942849202C00BA01A8 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		206BF296284920EC00BA01A8 /* BottomViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomViewCell.swift; sourceTree = "<group>"; };
 		287ED8E62834FF26009EA997 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForcatsTableViewCell.swift; sourceTree = "<group>"; };
@@ -93,6 +99,9 @@
 				287ED8E62834FF26009EA997 /* HomeViewController.swift */,
 				287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */,
 				287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */,
+				206BF29228491D0200BA01A8 /* MainView.swift */,
+				206BF2942849202C00BA01A8 /* BottomView.swift */,
+				206BF296284920EC00BA01A8 /* BottomViewCell.swift */,
 			);
 			path = HomeViewController;
 			sourceTree = "<group>";
@@ -174,13 +183,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				206BF2952849202C00BA01A8 /* BottomView.swift in Sources */,
 				287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */,
+				206BF29328491D0200BA01A8 /* MainView.swift in Sources */,
 				287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */,
 				287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */,
 				204B97FE282BC4FA00E92E22 /* WeatherApp.xcdatamodeld in Sources */,
 				204B97F8282BC4FA00E92E22 /* ViewController.swift in Sources */,
 				204B97F4282BC4FA00E92E22 /* AppDelegate.swift in Sources */,
 				204B97F6282BC4FA00E92E22 /* SceneDelegate.swift in Sources */,
+				206BF297284920ED00BA01A8 /* BottomViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

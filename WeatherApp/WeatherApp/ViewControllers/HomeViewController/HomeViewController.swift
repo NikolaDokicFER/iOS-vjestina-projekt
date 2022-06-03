@@ -8,7 +8,7 @@ class HomeViewController: UIViewController {
     private var stackView: UIStackView!
     
     //Nikola
-    private var mainView: UIView!
+    private var mainView: MainView!
     
     //current day forcats
     private var dayForcatsView: UIView!
@@ -66,10 +66,11 @@ class HomeViewController: UIViewController {
     
     //Nikola
     private func buildMainView() {
-        mainView = UIView()
+        mainView = MainView()
         mainView.backgroundColor = .systemBlue
         mainView.layer.cornerRadius = 30
         stackView.addArrangedSubview(mainView)
+        
     }
     
     private func buildDayForcatsView() {
@@ -155,8 +156,8 @@ class HomeViewController: UIViewController {
     //Nikola
     private func mainViewConstraints() {
         mainView.snp.makeConstraints({
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(550)
+            $0.top.leading.trailing.equalToSuperview().inset(20)
+            $0.height.equalTo(450)
         })
     }
     
