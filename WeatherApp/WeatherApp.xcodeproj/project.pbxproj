@@ -11,6 +11,9 @@
 		204B97F6282BC4FA00E92E22 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204B97F5282BC4FA00E92E22 /* SceneDelegate.swift */; };
 		204B9800282BC4FE00E92E22 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 204B97FF282BC4FE00E92E22 /* Assets.xcassets */; };
 		204B9803282BC4FE00E92E22 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 204B9801282BC4FE00E92E22 /* LaunchScreen.storyboard */; };
+		207CBE6E2849F8C900303EB2 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207CBE6D2849F8C900303EB2 /* MainView.swift */; };
+		207CBE702849F8E100303EB2 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207CBE6F2849F8E100303EB2 /* BottomView.swift */; };
+		207CBE722849F8F300303EB2 /* BottomViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 207CBE712849F8F300303EB2 /* BottomViewCell.swift */; };
 		287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E62834FF26009EA997 /* HomeViewController.swift */; };
 		287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */; };
 		287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */; };
@@ -34,6 +37,9 @@
 		204B97FF282BC4FE00E92E22 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		204B9802282BC4FE00E92E22 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		204B9804282BC4FE00E92E22 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		207CBE6D2849F8C900303EB2 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		207CBE6F2849F8E100303EB2 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
+		207CBE712849F8F300303EB2 /* BottomViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomViewCell.swift; sourceTree = "<group>"; };
 		287ED8E62834FF26009EA997 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForcatsTableViewCell.swift; sourceTree = "<group>"; };
@@ -110,6 +116,9 @@
 				287ED8E62834FF26009EA997 /* HomeViewController.swift */,
 				287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */,
 				287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */,
+				207CBE6D2849F8C900303EB2 /* MainView.swift */,
+				207CBE6F2849F8E100303EB2 /* BottomView.swift */,
+				207CBE712849F8F300303EB2 /* BottomViewCell.swift */,
 			);
 			path = HomeViewController;
 			sourceTree = "<group>";
@@ -238,8 +247,11 @@
 				28CA90832849420C0046CB6B /* ConversionFunctions.swift in Sources */,
 				28CA9081284940480046CB6B /* StyleConstants.swift in Sources */,
 				28CA907F284904F30046CB6B /* WeatherIcons.swift in Sources */,
+				207CBE702849F8E100303EB2 /* BottomView.swift in Sources */,
 				204B97F4282BC4FA00E92E22 /* AppDelegate.swift in Sources */,
+				207CBE722849F8F300303EB2 /* BottomViewCell.swift in Sources */,
 				28CA907A284771110046CB6B /* NetworkService.swift in Sources */,
+				207CBE6E2849F8C900303EB2 /* MainView.swift in Sources */,
 				204B97F6282BC4FA00E92E22 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
