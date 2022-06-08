@@ -14,6 +14,8 @@ class DayCollectionViewCell: UICollectionViewCell {
     private var weatherIcons = WeatherIcons()
     private var conversionFunctions = ConversionFunctions()
     
+    private var tempUnit: temperatureUnit?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -77,6 +79,7 @@ class DayCollectionViewCell: UICollectionViewCell {
     }
     
     func set(inputIndexPath: Int, inputWeatherModel: WeatherModel) {
+        fetchUnits()
         
         if (inputIndexPath == 0) {
             timeLabel.text = "Now"
@@ -106,8 +109,28 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         mainDescriptionLabel.text = weatherHourData.weather[0].main
         
-        let temp = conversionFunctions.toCelsius(kelvin: weatherHourData.temp)
-        tempLabel.text = "\(temp)°"
+        if (tempUnit == temperatureUnit.C) {
+            let temp = conversionFunctions.toCelsius(kelvin: weatherHourData.temp)
+            tempLabel.text = "\(temp)°C"
+        }
+        else {
+            let temp = conversionFunctions.toFahrenheit(kelvin: weatherHourData.temp)
+            tempLabel.text = "\(temp)°F"
+        }
+        
+    }
+    
+    func fetchUnits() {
+        guard let data = UserDefaults.standard.data(forKey: "key") else {
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let settingsModel = try decoder.decode(SettingsModel.self, from: data)
+            self.tempUnit = settingsModel.temperatureUnit
+        } catch {
+            print("Error when decoding SettingsModel")
+        }
     }
     
 }

@@ -13,6 +13,8 @@ class ForcatsTableViewCell: UITableViewCell {
     
     private var weatherIcons = WeatherIcons()
     private var conversionFunctions = ConversionFunctions()
+    
+    private var tempUnit: temperatureUnit?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -77,6 +79,8 @@ class ForcatsTableViewCell: UITableViewCell {
     }
     
     func set(inputIndexPath: Int, inputWeatherModel: WeatherModel) {
+        fetchUnits()
+        
         let date = Calendar.current.date(byAdding: .day, value: inputIndexPath+1, to: Date())
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "EEEE"
@@ -88,9 +92,30 @@ class ForcatsTableViewCell: UITableViewCell {
         weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
         mainDescriptionLabel.text = weatherDayData.weather[0].main
         
-        let min = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.min)
-        let max = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.max)
-        tempHLLabel.text = "\(min)°/\(max)°"
+        if (tempUnit == temperatureUnit.C) {
+            let min = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.min)
+            let max = conversionFunctions.toCelsius(kelvin: weatherDayData.temp.max)
+            tempHLLabel.text = "\(min)°C/\(max)°C"
+        }
+        else {
+            let min = conversionFunctions.toFahrenheit(kelvin: weatherDayData.temp.min)
+            let max = conversionFunctions.toFahrenheit(kelvin: weatherDayData.temp.max)
+            tempHLLabel.text = "\(min)°F/\(max)°F"
+        }
+        
+    }
+    
+    func fetchUnits() {
+        guard let data = UserDefaults.standard.data(forKey: "key") else {
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let settingsModel = try decoder.decode(SettingsModel.self, from: data)
+            self.tempUnit = settingsModel.temperatureUnit
+        } catch {
+            print("Error when decoding SettingsModel")
+        }
     }
 
 }
