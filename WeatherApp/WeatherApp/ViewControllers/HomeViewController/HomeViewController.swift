@@ -29,9 +29,6 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        buildViews()
-//        buildConstraints()
-        
         networkService.getWeatherData(cityLat: 45.8131, cityLon: -15.9775, completionHandler: { (result: Result<WeatherModel, RequestError>) in
             switch result {
             case .failure(let error):
@@ -40,38 +37,36 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.weatherModel = value
 
-                    //print(self.weatherModel)
-
                     self.buildViews()
                     self.buildConstraints()
-                    
-                    //self.collectionView.dataSource = self
                 }
             }
         })
         
-//
-//        //Adrian
-//        //to nam sluzi da spremimo lokacije grada, npr za Zagreb
-//        //das ovoj funkciji ime grada (malim slovima) i ona fetcha s api-a njegove lokacije i onda bi to trebalo sve pospremiti u bazu
-//        networkService.getLocation(cityName: "zagreb", completionHandler: { (result: Result<CityModel, RequestError>) in
-//            switch result {
-//            case .failure(let error):
-//                print(error)
-//            case .success(let value):
-//                DispatchQueue.main.async {
-//
-//                    //tuj ide kod za spremanje u bazu
-//
-//                    // ove vrijednosti spremas u bazu
-//                    // OBAVEZNO spremiti i ime grada malim slovima, npr. "zagreb" jer prek toga pristupamo kasnije
-//                    //print(value.coord.lat)
-//                    //print(value.coord.lon)
-//
-//                }
-//            }
-//        })
-//
+        
+        
+        //Adrian
+        //to nam sluzi da spremimo lokacije grada, npr za Zagreb
+        //das ovoj funkciji ime grada (malim slovima) i ona fetcha s api-a njegove lokacije i onda bi to trebalo sve pospremiti u bazu
+        networkService.getLocation(cityName: "zagreb", completionHandler: { (result: Result<CityModel, RequestError>) in
+            switch result {
+            case .failure(let error):
+                print(error)
+            case .success(let value):
+                DispatchQueue.main.async {
+
+                    //tuj ide kod za spremanje u bazu
+
+                    // ove vrijednosti spremas u bazu
+                    // OBAVEZNO spremiti i ime grada malim slovima, npr. "zagreb" jer prek toga pristupamo kasnije
+                    //print(value.coord.lat)
+                    //print(value.coord.lon)
+                    //print("Zagreb (\(value.sys.country))")
+
+                }
+            }
+        })
+        
         
         
     }
@@ -94,8 +89,9 @@ class HomeViewController: UIViewController {
     
     private func buildScrollViewWithStack() {
         scrollView = UIScrollView()
-        scrollView.bounces = false
+        scrollView.bounces = true
         scrollView.showsVerticalScrollIndicator = false
+        scrollView.delegate = self
         view.addSubview(scrollView)
         
         contentView = UIView()
@@ -125,11 +121,6 @@ class HomeViewController: UIViewController {
         dayAndDateLabel = UILabel()
         dayAndDateLabel.textColor = StyleConstants.AppColors.textColor
         dayAndDateLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
-        
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE | MMM dd"
-        let dayOfTheWeekString = dateFormatter.string(from: date)
         
         dayAndDateLabel.text = "Forcats for 24 Hours"
         dayForcatsView.addSubview(dayAndDateLabel)
@@ -230,13 +221,30 @@ class HomeViewController: UIViewController {
             $0.top.equalTo(weekForcatsLabel.snp.bottom).offset(10)
         })
     }
+}
+
+//MARK: - ScrollView - Scroll to top - refresh weather data
+
+extension HomeViewController: UIScrollViewDelegate {
     
-    private func openForcatsButtonConstraints() {
-        
-    }
-    
-    private func closeForcatsButtonConstraints() {
-        
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y == 0 {
+            
+            networkService.getWeatherData(cityLat: 55.7522, cityLon: 37.6156, completionHandler: { (result: Result<WeatherModel, RequestError>) in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let value):
+                    DispatchQueue.main.async {
+                        self.weatherModel = value
+
+                        self.dayCollectionView.reloadData()
+                        self.forcatsTableView.reloadData()
+                    }
+                }
+            })
+            
+        }
     }
 }
 

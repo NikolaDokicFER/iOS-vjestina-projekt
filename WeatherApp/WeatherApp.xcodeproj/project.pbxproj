@@ -18,6 +18,11 @@
 		287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */; };
 		287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */; };
 		287ED8EE2834FFB7009EA997 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 287ED8ED2834FFB7009EA997 /* SnapKit */; };
+		2880BF262850ED6800AD725B /* UnitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2880BF252850ED6800AD725B /* UnitModels.swift */; };
+		2880BF292850EDC700AD725B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2880BF282850EDC700AD725B /* SettingsViewController.swift */; };
+		2880BF2C2850EE2D00AD725B /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2880BF2B2850EE2D00AD725B /* LocationViewController.swift */; };
+		2880BF2E2850EE7100AD725B /* LocationSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2880BF2D2850EE7100AD725B /* LocationSelectorCell.swift */; };
+		2880BF302850EEC700AD725B /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2880BF2F2850EEC700AD725B /* SearchBarView.swift */; };
 		28CA907428476D660046CB6B /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CA907328476D660046CB6B /* WeatherModel.swift */; };
 		28CA90762847709F0046CB6B /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CA90752847709F0046CB6B /* RequestError.swift */; };
 		28CA907A284771110046CB6B /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CA9079284771110046CB6B /* NetworkService.swift */; };
@@ -43,6 +48,11 @@
 		287ED8E62834FF26009EA997 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		287ED8E82834FF47009EA997 /* DayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayCollectionViewCell.swift; sourceTree = "<group>"; };
 		287ED8EA2834FF64009EA997 /* ForcatsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForcatsTableViewCell.swift; sourceTree = "<group>"; };
+		2880BF252850ED6800AD725B /* UnitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnitModels.swift; sourceTree = "<group>"; };
+		2880BF282850EDC700AD725B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		2880BF2B2850EE2D00AD725B /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
+		2880BF2D2850EE7100AD725B /* LocationSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSelectorCell.swift; sourceTree = "<group>"; };
+		2880BF2F2850EEC700AD725B /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		28CA907328476D660046CB6B /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		28CA90752847709F0046CB6B /* RequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
 		28CA9079284771110046CB6B /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -106,6 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				287ED8B42833BBA9009EA997 /* HomeViewController */,
+				2880BF2A2850EE1C00AD725B /* LocationViewController */,
+				2880BF272850ED9700AD725B /* SettingsViewController */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -123,6 +135,24 @@
 			path = HomeViewController;
 			sourceTree = "<group>";
 		};
+		2880BF272850ED9700AD725B /* SettingsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2880BF282850EDC700AD725B /* SettingsViewController.swift */,
+			);
+			path = SettingsViewController;
+			sourceTree = "<group>";
+		};
+		2880BF2A2850EE1C00AD725B /* LocationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2880BF2B2850EE2D00AD725B /* LocationViewController.swift */,
+				2880BF2D2850EE7100AD725B /* LocationSelectorCell.swift */,
+				2880BF2F2850EEC700AD725B /* SearchBarView.swift */,
+			);
+			path = LocationViewController;
+			sourceTree = "<group>";
+		};
 		28CA906D284767580046CB6B /* Network */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +167,7 @@
 			children = (
 				28CA907328476D660046CB6B /* WeatherModel.swift */,
 				28CA907B2848D3F10046CB6B /* CityModel.swift */,
+				2880BF252850ED6800AD725B /* UnitModels.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -237,8 +268,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				28CA908928495DFA0046CB6B /* CoreDataStack.swift in Sources */,
+				2880BF2E2850EE7100AD725B /* LocationSelectorCell.swift in Sources */,
+				2880BF292850EDC700AD725B /* SettingsViewController.swift in Sources */,
 				287ED8EB2834FF64009EA997 /* ForcatsTableViewCell.swift in Sources */,
 				287ED8E72834FF26009EA997 /* HomeViewController.swift in Sources */,
+				2880BF262850ED6800AD725B /* UnitModels.swift in Sources */,
 				28CA90762847709F0046CB6B /* RequestError.swift in Sources */,
 				28CA908728495DA20046CB6B /* CityDatabase.xcdatamodeld in Sources */,
 				287ED8E92834FF47009EA997 /* DayCollectionViewCell.swift in Sources */,
@@ -249,7 +283,9 @@
 				28CA907F284904F30046CB6B /* WeatherIcons.swift in Sources */,
 				207CBE702849F8E100303EB2 /* BottomView.swift in Sources */,
 				204B97F4282BC4FA00E92E22 /* AppDelegate.swift in Sources */,
+				2880BF2C2850EE2D00AD725B /* LocationViewController.swift in Sources */,
 				207CBE722849F8F300303EB2 /* BottomViewCell.swift in Sources */,
+				2880BF302850EEC700AD725B /* SearchBarView.swift in Sources */,
 				28CA907A284771110046CB6B /* NetworkService.swift in Sources */,
 				207CBE6E2849F8C900303EB2 /* MainView.swift in Sources */,
 				204B97F6282BC4FA00E92E22 /* SceneDelegate.swift in Sources */,

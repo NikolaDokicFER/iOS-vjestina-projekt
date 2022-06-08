@@ -10,8 +10,9 @@ import UIKit
 import SnapKit
 
 class MainView: UIView{
-    private var addLocationImageView: UIImageView!
-    private var settingsImageView: UIImageView!
+    
+    private var addLocationButton: UIButton!
+    private var settingsButton: UIButton!
     private var locationNameLabel: UILabel!
     private var currentWeatherImageView: UIImageView!
     private var currentDateLabel: UILabel!
@@ -35,11 +36,12 @@ class MainView: UIView{
     }
     
     private func buildViews(){
-        addLocationImageView = UIImageView(image: UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(scale: .large)))
-        self.addSubview(addLocationImageView)
         
-        settingsImageView = UIImageView(image: UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(scale: .large)))
-        self.addSubview(settingsImageView)
+        addLocationButton = UIButton()
+        self.addSubview(addLocationButton)
+        
+        settingsButton = UIButton()
+        self.addSubview(settingsButton)
         
         locationNameLabel = UILabel()
         self.addSubview(locationNameLabel)
@@ -70,10 +72,15 @@ class MainView: UIView{
     }
     
     private func styleViews(){
-        addLocationImageView.tintColor = .white
         
-        settingsImageView.tintColor = .white
-        settingsImageView.transform = settingsImageView.transform.rotated(by: .pi / 2)
+        addLocationButton.setImage(UIImage(systemName: "plus", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        addLocationButton.addTarget(self, action: #selector(addLocationButtonTap), for: .touchUpInside)
+        addLocationButton.tintColor = UIColor.white
+        
+        settingsButton.transform = settingsButton.transform.rotated(by: .pi / 2)
+        settingsButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(scale: .large)), for: .normal)
+        settingsButton.addTarget(self, action: #selector(settingsButtonTap), for: .touchUpInside)
+        settingsButton.tintColor = UIColor.white
         
         currentWeatherImageView.tintColor = .white
         
@@ -103,12 +110,13 @@ class MainView: UIView{
     }
     
     private func constraintViews(){
-        addLocationImageView.snp.makeConstraints({
+        
+        addLocationButton.snp.makeConstraints({
             $0.top.equalToSuperview().inset(20)
             $0.leading.equalToSuperview().inset(25)
         })
         
-        settingsImageView.snp.makeConstraints({
+        settingsButton.snp.makeConstraints({
             $0.top.equalToSuperview().inset(20)
             $0.trailing.equalToSuperview().inset(25)
         })
@@ -160,5 +168,13 @@ class MainView: UIView{
             $0.top.equalTo(separatorLine.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
         }
+    }
+    
+    @objc private func settingsButtonTap() {
+        //
+    }
+    
+    @objc private func addLocationButtonTap() {
+        //
     }
 }

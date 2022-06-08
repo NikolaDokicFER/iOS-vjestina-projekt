@@ -9,10 +9,15 @@ import Foundation
 
 struct CityModel: Codable {
     let coord: Cordinates
+    let sys: Sys
+    let cod: Int
 }
 
 struct Cordinates: Codable {
     let lon: Float
     let lat: Float
 }
+
+struct Sys: Codable {
+    let country: String}
 

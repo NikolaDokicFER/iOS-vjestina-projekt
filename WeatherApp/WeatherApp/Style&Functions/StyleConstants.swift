@@ -11,8 +11,8 @@ struct StyleConstants {
     
     struct AppColors {
         static let lightBlue = UIColor(red: 98.0/255.0, green: 184.0/255.0, blue: 246.0/255.0, alpha: 1.0)
-        static let textColor = UIColor.black
-        static let weatherIconsColor = UIColor.black
+        static let textColor = UIColor.white
+        static let weatherIconsColor = UIColor.white
     }
     
     struct TextSizes {
