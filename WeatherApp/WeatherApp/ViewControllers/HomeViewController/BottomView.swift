@@ -20,6 +20,7 @@ class BottomView: UIView{
     private var weatherIcons = WeatherIcons()
     private var windsUnit: windUnit?
     private var pressuresUnit: pressureUnit?
+    private var conversionFunctions = ConversionFunctions()
     
     init(weather: WeatherModel) {
         super.init(frame: CGRect.zero)
@@ -99,25 +100,32 @@ class BottomView: UIView{
         let weatherDirectionImage = weatherIcons.windIcon(degree: weatherModel.current.windDeg)
         
         if(windsUnit == windUnit.kmh){
-            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) km/h", bottomText: "Wind")
+            let wind = conversionFunctions.toKmPerHour(metersPerSecond: weatherModel.current.windSpeed)
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(wind) km/h", bottomText: "Wind")
         }else if(windsUnit == windUnit.knots){
-            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) knots", bottomText: "Wind")
+            let wind = conversionFunctions.toKnots(metersPerSecond: weatherModel.current.windSpeed)
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(wind) knots", bottomText: "Wind")
         }else if(windsUnit == windUnit.mph){
-            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) mph", bottomText: "Wind")
+            let wind = conversionFunctions.toMilesPerHour(metersPerSecond: weatherModel.current.windSpeed)
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(wind) mph", bottomText: "Wind")
         }else{
             viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) mps", bottomText: "Wind")
         }
         
         if(pressuresUnit == pressureUnit.atm){
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) atm", bottomText: "Pressure")
+            let pressure = conversionFunctions.toAtm(hPa: weatherModel.current.pressure)
+            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) atm", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.hpa){
             viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) hpa", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.inhg){
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) inhf", bottomText: "Pressure")
+            let pressure = conversionFunctions.toInHg(hPa: weatherModel.current.pressure)
+            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) inHg", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.mmhg){
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) mmhg", bottomText: "Pressure")
+            let pressure = conversionFunctions.toMmHg(hPa: weatherModel.current.pressure)
+            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) mmHg", bottomText: "Pressure")
         }else{
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) mbar", bottomText: "Pressure")
+            let pressure = conversionFunctions.tomBar(hPa: weatherModel.current.pressure)
+            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) mBar", bottomText: "Pressure")
         }
     }
     
