@@ -31,17 +31,18 @@ class LocationSelectorCell: UITableViewCell{
         contentView.layer.cornerRadius = 10
         self.contentView.layer.masksToBounds = true
         
-        cityName.font = UIFont.systemFont(ofSize: 18)
+        cityName.font = UIFont(name: StyleConstants.FontNames.boldFont, size: 18)
         cityName.textColor = UIColor(red: 0.105, green: 0.145, blue: 0.254, alpha: 1)
         contentView.addSubview(cityName)
         
-        contentView.addSubview(weatherPicture)
+//        contentView.addSubview(weatherPicture)
         
-        weatherDescription.font = UIFont.systemFont(ofSize: 12)
+        weatherDescription.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 12)
         weatherDescription.textColor = UIColor(red: 0.329, green: 0.357, blue: 0.439, alpha: 1)
+        weatherDescription.numberOfLines = 0
         contentView.addSubview(weatherDescription)
         
-        temperatureMinMax.font = UIFont.systemFont(ofSize: 12)
+        temperatureMinMax.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 12)
         temperatureMinMax.textColor = UIColor(red: 0.329, green: 0.357, blue: 0.439, alpha: 1)
         contentView.addSubview(temperatureMinMax)
     }
@@ -49,7 +50,7 @@ class LocationSelectorCell: UITableViewCell{
     func fillWithContent(city: String, lat: Float, lon: Float){
         cityName.text = city
         weatherPicture.image = UIImage(systemName: "cloud.sun.rain.fill")
-        weatherDescription.text = "press cell to remove from saved cities"
+        weatherDescription.text = "press to remove"
         temperatureMinMax.text = "\(lat) -- \(lon)"
     }
     
@@ -73,16 +74,16 @@ class LocationSelectorCell: UITableViewCell{
             $0.top.equalTo(cityName.snp.bottom).offset(3)
         }
         
-        weatherPicture.snp.makeConstraints{
-            $0.trailing.equalToSuperview().inset(30)
-            $0.top.equalTo(cityName.snp.top).offset(-3)
-            $0.height.equalTo(30)
-            $0.width.equalTo(30)
-        }
+//        weatherPicture.snp.makeConstraints{
+//            $0.trailing.equalToSuperview().inset(30)
+//            $0.top.equalTo(cityName.snp.top).offset(-3)
+//            $0.height.equalTo(30)
+//            $0.width.equalTo(30)
+//        }
         
         weatherDescription.snp.makeConstraints{
-            $0.trailing.equalToSuperview()
-            $0.top.equalTo(weatherPicture.snp.bottom).offset(5)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(cityName.snp.top).offset(10)
         }
     }
 }
