@@ -49,7 +49,7 @@ class MainView: UIView{
         locationNameLabel = UILabel()
         self.addSubview(locationNameLabel)
         
-        let image = weatherIcons.bigWeatherIcon(conditionId: weatherModel.current.weather[0].id)
+        let image = weatherIcons.weatherIcon(conditionId: weatherModel.current.weather[0].id)
         currentWeatherImageView = UIImageView(image: UIImage(systemName: image))
         self.addSubview(currentWeatherImageView)
         
@@ -168,6 +168,7 @@ class MainView: UIView{
     
     func setWeather(weather: WeatherModel){
         self.weatherModel = weather
+        fetchUnits()
         buildViews()
         styleViews()
         constraintViews()
@@ -175,6 +176,20 @@ class MainView: UIView{
     
     func setCity(name: String){
         cityName = name
+    }
+    
+    func setUnits(){
+        fetchUnits()
+        if (tempUnit == temperatureUnit.C) {
+            let temp = conversionFunctions.toCelsius(kelvin: weatherModel.current.temp)
+            currentDegreesLabel.text = "\(temp)°C"
+        }
+        else {
+            let temp = conversionFunctions.toFahrenheit(kelvin: weatherModel.current.temp)
+            currentDegreesLabel.text = "\(temp)°F"
+        }
+        
+        bottomView.setUnits()
     }
     
     @objc private func settingsButtonTap() {
