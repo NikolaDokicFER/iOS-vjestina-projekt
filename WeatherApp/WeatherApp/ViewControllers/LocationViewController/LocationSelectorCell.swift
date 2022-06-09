@@ -46,11 +46,11 @@ class LocationSelectorCell: UITableViewCell{
         contentView.addSubview(temperatureMinMax)
     }
     
-    func fillWithContent(){
-        cityName.text = "Jakarta"
+    func fillWithContent(city: String, lat: Float, lon: Float){
+        cityName.text = city
         weatherPicture.image = UIImage(systemName: "cloud.sun.rain.fill")
-        weatherDescription.text = "Heavy rain"
-        temperatureMinMax.text = "18/26"
+        weatherDescription.text = "press cell to remove from saved cities"
+        temperatureMinMax.text = "\(lat) -- \(lon)"
     }
     
     func makeConstraints(){
@@ -81,7 +81,7 @@ class LocationSelectorCell: UITableViewCell{
         }
         
         weatherDescription.snp.makeConstraints{
-            $0.centerX.equalTo(weatherPicture.snp.centerX)
+            $0.trailing.equalToSuperview()
             $0.top.equalTo(weatherPicture.snp.bottom).offset(5)
         }
     }
