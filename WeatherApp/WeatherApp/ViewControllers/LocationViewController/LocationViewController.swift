@@ -14,6 +14,8 @@ class LocationViewController: UIViewController{
     
     var homeVc: HomeViewController?
     
+    private var alertView: UIAlertController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,6 +96,16 @@ extension LocationViewController: UITextFieldDelegate{
             switch result {
                 case .failure(let error):
                     print(error)
+                    
+                    if (cityReduced != "") {
+                        DispatchQueue.main.async {
+                            let message: String = "There is no such city!"
+                            self.alertView = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertController.Style.alert)
+                            self.alertView.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+                            self.present(self.alertView, animated: true, completion: nil)
+                        }
+                    }
+                
                 case .success(let value):
                     DispatchQueue.main.async {
                         self.dataBaseSource.saveCity(name: self.city, lat: value.coord.lat, lon: value.coord.lon)
@@ -118,12 +130,10 @@ extension LocationViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LocationSelectorCell.cellIdentifier, for: indexPath) as! LocationSelectorCell
         
-        //uzima grad iz arraya gradova i puni odredenu celiju s podacima tog grada, jedino je pitanje kakav bude model
+        //uzima grad iz arraya gradova i puni odredenu celiju s podacima tog grada
         let city = cities[indexPath.section]
         
         cell.fillWithContent(city: city.name, lat: city.lon, lon: city.lat)
-        
-        //cell.selectionStyle = .none
         
         return cell
     }
