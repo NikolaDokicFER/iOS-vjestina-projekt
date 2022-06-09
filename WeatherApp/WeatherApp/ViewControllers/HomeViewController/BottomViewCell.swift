@@ -16,7 +16,7 @@ class BottomViewCell: UIView{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+    
         buildViews()
         constraintViews()
     }
@@ -31,12 +31,12 @@ class BottomViewCell: UIView{
         self.addSubview(image)
         
         topText = UILabel()
-        topText.font = UIFont(name: "Helvetica Neue", size: 12)
+        topText.font = UIFont(name: StyleConstants.FontNames.boldFont, size: 14)
         topText.textColor = .white
         self.addSubview(topText)
         
         bottomText = UILabel()
-        bottomText.font = UIFont(name: "Helvetica Neue", size: 12)
+        bottomText.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 14)
         bottomText.textColor = .white
         self.addSubview(bottomText)
     }

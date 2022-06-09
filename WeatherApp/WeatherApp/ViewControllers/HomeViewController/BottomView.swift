@@ -65,7 +65,10 @@ class BottomView: UIView{
         stackView1.addArrangedSubview(viewCell1)
         
         viewCell2 = BottomViewCell()
-        viewCell2.setData(image: UIImage(systemName: "sun.max", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.uvi)", bottomText: "UV radiation")
+        let image = UIImage(systemName: "sun.max.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        image?.withRenderingMode(.automatic)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        viewCell2.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(weatherModel.current.uvi)", bottomText: "UV radiation")
         stackView1.addArrangedSubview(viewCell2)
 
         viewCell3 = BottomViewCell()
@@ -112,20 +115,24 @@ class BottomView: UIView{
             viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) mps", bottomText: "Wind")
         }
         
+        let image = UIImage(systemName: "thermometer.sun.fill", withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        image?.withRenderingMode(.automatic)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        
         if(pressuresUnit == pressureUnit.atm){
             let pressure = conversionFunctions.toAtm(hPa: weatherModel.current.pressure)
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) atm", bottomText: "Pressure")
+            viewCell3.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(pressure) atm", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.hpa){
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) hpa", bottomText: "Pressure")
+            viewCell3.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(weatherModel.current.pressure) hpa", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.inhg){
             let pressure = conversionFunctions.toInHg(hPa: weatherModel.current.pressure)
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) inHg", bottomText: "Pressure")
+            viewCell3.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(pressure) inHg", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.mmhg){
             let pressure = conversionFunctions.toMmHg(hPa: weatherModel.current.pressure)
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) mmHg", bottomText: "Pressure")
+            viewCell3.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(pressure) mmHg", bottomText: "Pressure")
         }else{
             let pressure = conversionFunctions.tomBar(hPa: weatherModel.current.pressure)
-            viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(pressure) mBar", bottomText: "Pressure")
+            viewCell3.setData(image: image!.applyingSymbolConfiguration(config)!, topText: "\(pressure) mBar", bottomText: "Pressure")
         }
     }
     

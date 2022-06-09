@@ -105,7 +105,10 @@ class DayCollectionViewCell: UICollectionViewCell {
         
         let weatherHourData = inputWeatherModel.hourly[inputIndexPath]
         let systemIcon = weatherIcons.weatherIcon(conditionId: weatherHourData.weather[0].id)
-        weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        let image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        image?.withRenderingMode(.automatic)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        weatherIcon.image = image!.applyingSymbolConfiguration(config)
         
         mainDescriptionLabel.text = weatherHourData.weather[0].main
         

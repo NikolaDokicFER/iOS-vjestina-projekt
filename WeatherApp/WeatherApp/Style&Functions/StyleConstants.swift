@@ -17,6 +17,8 @@ struct StyleConstants {
     
     struct TextSizes {
         static let textNormal = CGFloat(16)
+        static let textMedium = CGFloat(20)
+        static let textLarge = CGFloat(45)
     }
     
     struct FontNames {

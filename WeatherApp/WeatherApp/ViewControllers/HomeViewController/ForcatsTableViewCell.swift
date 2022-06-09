@@ -89,7 +89,11 @@ class ForcatsTableViewCell: UITableViewCell {
         
         let weatherDayData = inputWeatherModel.daily[inputIndexPath]
         let systemIcon = weatherIcons.weatherIcon(conditionId: weatherDayData.weather[0].id)
-        weatherIcon.image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        let image = UIImage(systemName: systemIcon, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        image?.withRenderingMode(.automatic)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        weatherIcon.image = image!.applyingSymbolConfiguration(config)
+        
         mainDescriptionLabel.text = weatherDayData.weather[0].main
         
         if (tempUnit == temperatureUnit.C) {

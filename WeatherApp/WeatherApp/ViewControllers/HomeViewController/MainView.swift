@@ -50,7 +50,11 @@ class MainView: UIView{
         self.addSubview(locationNameLabel)
         
         let image = weatherIcons.weatherIcon(conditionId: weatherModel.current.weather[0].id)
-        currentWeatherImageView = UIImageView(image: UIImage(systemName: image))
+        let uiImage = UIImage(systemName: image)
+        uiImage?.withRenderingMode(.automatic)
+        let config = UIImage.SymbolConfiguration.preferringMulticolor()
+        currentWeatherImageView = UIImageView(image: uiImage!.applyingSymbolConfiguration(config))
+        
         self.addSubview(currentWeatherImageView)
         
         currentDateLabel = UILabel()
@@ -83,7 +87,7 @@ class MainView: UIView{
         currentWeatherImageView.tintColor = .white
         
         locationNameLabel.text = cityName
-        locationNameLabel.font = UIFont(name: "Helvetica Neue Bold", size: 14)
+        locationNameLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textMedium)
         locationNameLabel.textColor = .white
         
         let date = Calendar.current.date(byAdding: .day, value: 1, to: Date())
@@ -92,10 +96,10 @@ class MainView: UIView{
         let dayOfTheWeekString = dateFormatter.string(from: date!)
         
         currentDateLabel.text = dayOfTheWeekString
-        currentDateLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        currentDateLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
         currentDateLabel.textColor = .white
         
-        currentDegreesLabel.font = UIFont(name: "Helvetica Neue Bold", size: 45)
+        currentDegreesLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textLarge)
         currentDegreesLabel.textColor = .white
         
         if (tempUnit == temperatureUnit.C) {
@@ -108,7 +112,7 @@ class MainView: UIView{
         }
         
         weatherDescriptionLabel.text = "\(weatherModel.current.weather[0].main)"
-        weatherDescriptionLabel.font = UIFont(name: "Helvetica Neue", size: 14)
+        weatherDescriptionLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: StyleConstants.TextSizes.textNormal)
         weatherDescriptionLabel.textColor = .white
         
         separatorLine.backgroundColor = .white
