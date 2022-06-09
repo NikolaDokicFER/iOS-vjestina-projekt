@@ -53,6 +53,11 @@ class CitiesRepository{
     
     func deleteCity(name: String){
         let managedContext = coreDataStack.persistentContainer.viewContext
+       
+        if(name == "Zagreb"){
+            return
+        }
+        
         guard let city = fetchCity(name: name) else {return}
         managedContext.delete(city)
         do {
