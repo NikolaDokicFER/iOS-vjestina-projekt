@@ -11,24 +11,27 @@ import SnapKit
 
 class MainView: UIView{
     
+    var delegate: MainViewDelegate?
     private var addLocationButton: UIButton!
     private var settingsButton: UIButton!
     private var locationNameLabel: UILabel!
     private var currentWeatherImageView: UIImageView!
     private var currentDateLabel: UILabel!
     private var currentDegreesLabel: UILabel!
-    private var celsiusSymbol: UILabel!
     private var weatherDescriptionLabel: UILabel!
     private var separatorLine: UIView!
     private var bottomView: BottomView!
-    private var pageControl: UIPageControl!
+    private var weatherModel: WeatherModel!
+    private var tempUnit: temperatureUnit?
+    private var conversionFunctions = ConversionFunctions()
+    private var weatherIcons = WeatherIcons()
+    private var cityName: String!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        buildViews()
-        styleViews()
-        constraintViews()
+        backgroundColor = StyleConstants.AppColors.lightBlue
+        layer.cornerRadius = 30
     }
     
     required init?(coder: NSCoder) {
@@ -46,7 +49,8 @@ class MainView: UIView{
         locationNameLabel = UILabel()
         self.addSubview(locationNameLabel)
         
-        currentWeatherImageView = UIImageView(image: UIImage(systemName: "cloud.sun.fill"))
+        let image = weatherIcons.bigWeatherIcon(conditionId: weatherModel.current.weather[0].id)
+        currentWeatherImageView = UIImageView(image: UIImage(systemName: image))
         self.addSubview(currentWeatherImageView)
         
         currentDateLabel = UILabel()
@@ -55,20 +59,14 @@ class MainView: UIView{
         currentDegreesLabel = UILabel()
         self.addSubview(currentDegreesLabel)
         
-        celsiusSymbol = UILabel()
-        self.addSubview(celsiusSymbol)
-        
         weatherDescriptionLabel = UILabel()
         self.addSubview(weatherDescriptionLabel)
         
         separatorLine = UIView()
         self.addSubview(separatorLine)
         
-        bottomView = BottomView()
+        bottomView = BottomView(weather: weatherModel)
         self.addSubview(bottomView)
-        
-        pageControl = UIPageControl()
-        self.addSubview(pageControl)
     }
     
     private func styleViews(){
@@ -84,29 +82,37 @@ class MainView: UIView{
         
         currentWeatherImageView.tintColor = .white
         
-        locationNameLabel.text = "Zagreb"
+        locationNameLabel.text = cityName
         locationNameLabel.font = UIFont(name: "Helvetica Neue Bold", size: 14)
         locationNameLabel.textColor = .white
         
-        currentDateLabel.text = "Monday | Jun 6"
+        let date = Calendar.current.date(byAdding: .day, value: 1, to: Date())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE | MMM dd"
+        let dayOfTheWeekString = dateFormatter.string(from: date!)
+        
+        currentDateLabel.text = dayOfTheWeekString
         currentDateLabel.font = UIFont(name: "Helvetica Neue", size: 14)
         currentDateLabel.textColor = .white
         
-        currentDegreesLabel.text = "28"
-        currentDegreesLabel.font = UIFont(name: "Helvetica Neue Bold", size: 60)
+        currentDegreesLabel.font = UIFont(name: "Helvetica Neue Bold", size: 45)
         currentDegreesLabel.textColor = .white
         
-        celsiusSymbol.text = "°"
-        celsiusSymbol.font = UIFont(name: "Helvetica Neue", size: 50)
-        celsiusSymbol.textColor = .white
+        if (tempUnit == temperatureUnit.C) {
+            let temp = conversionFunctions.toCelsius(kelvin: weatherModel.current.temp)
+            currentDegreesLabel.text = "\(temp)°C"
+        }
+        else {
+            let temp = conversionFunctions.toFahrenheit(kelvin: weatherModel.current.temp)
+            currentDegreesLabel.text = "\(temp)°F"
+        }
         
-        weatherDescriptionLabel.text = "Sunny"
+        weatherDescriptionLabel.text = "\(weatherModel.current.weather[0].main)"
         weatherDescriptionLabel.font = UIFont(name: "Helvetica Neue", size: 14)
         weatherDescriptionLabel.textColor = .white
         
         separatorLine.backgroundColor = .white
         
-        pageControl.numberOfPages = 2
     }
     
     private func constraintViews(){
@@ -126,13 +132,8 @@ class MainView: UIView{
             $0.centerX.equalToSuperview()
         })
         
-        pageControl.snp.makeConstraints({
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(locationNameLabel.snp.bottom)
-        })
-        
         currentWeatherImageView.snp.makeConstraints({
-            $0.top.equalTo(pageControl.snp.bottom).offset(10)
+            $0.top.equalTo(locationNameLabel.snp.bottom).offset(30)
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(130)
         })
@@ -145,11 +146,6 @@ class MainView: UIView{
         currentDegreesLabel.snp.makeConstraints({
             $0.top.equalTo(currentDateLabel.snp.bottom).offset(10)
             $0.centerX.equalToSuperview()
-        })
-        
-        celsiusSymbol.snp.makeConstraints({
-            $0.top.equalTo(currentDegreesLabel.snp.top).offset(-5)
-            $0.trailing.equalTo(currentDegreesLabel.snp.trailing).offset(15)
         })
         
         weatherDescriptionLabel.snp.makeConstraints({
@@ -170,11 +166,39 @@ class MainView: UIView{
         }
     }
     
+    func setWeather(weather: WeatherModel){
+        self.weatherModel = weather
+        buildViews()
+        styleViews()
+        constraintViews()
+    }
+    
+    func setCity(name: String){
+        cityName = name
+    }
+    
     @objc private func settingsButtonTap() {
-        //
+        delegate?.buttonTap(name: "Settings")
     }
     
     @objc private func addLocationButtonTap() {
-        //
+        delegate?.buttonTap(name: "Location")
     }
+    
+    func fetchUnits() {
+        guard let data = UserDefaults.standard.data(forKey: "key") else {
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let settingsModel = try decoder.decode(SettingsModel.self, from: data)
+            self.tempUnit = settingsModel.temperatureUnit
+        } catch {
+            print("Error when decoding SettingsModel")
+        }
+    }
+}
+
+protocol MainViewDelegate{
+    func buttonTap(name: String)
 }

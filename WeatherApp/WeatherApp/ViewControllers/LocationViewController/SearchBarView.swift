@@ -23,7 +23,7 @@ class SearchBarView: UIView {
     }
     
     func styleSubviews() {
-        backgroundColorView.backgroundColor = .systemGray
+        backgroundColorView.backgroundColor = .white
         backgroundColorView.layer.cornerRadius = 10
 
         magnifierIcon.tintColor = UIColor(red: 0.043, green: 0.145, blue: 0.247, alpha: 1)
@@ -117,7 +117,6 @@ class SearchBarView: UIView {
     
     @objc
     func cancelButtonTapped(_ sender: UIButton) {
-        searchInputTextField.delegate?.textFieldDidEndEditing?(searchInputTextField)
         searchInputTextField.endEditing(true)
 //        backgroundColorView.snp.remakeConstraints {
 //            $0.edges.equalToSuperview()

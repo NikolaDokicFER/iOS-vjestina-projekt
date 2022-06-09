@@ -1,19 +1,30 @@
 import Foundation
 import UIKit
 import SnapKit
+import MapKit
 
 class LocationViewController: UIViewController{
     let searchBar = SearchBarView()
     let locationTable = UITableView(frame: .zero)
     let headerIdentifier = "headerIdentifier"
+    private var networkService = NetworkService()
+    var cities: [CityNameModel] = []
+    private var dataBaseSource: DataBaseSource!
+    private var city: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        dataBaseSource = DataBaseSource()
+        
+        cities = dataBaseSource.fetchCities()
+
         styleViews()
         makeConstraints()
     }
     
     func styleViews(){
+        
         view.backgroundColor = UIColor(red: 0.384, green: 0.722, blue: 0.965, alpha: 1)
         
         let appearance = UINavigationBarAppearance()
@@ -42,6 +53,7 @@ class LocationViewController: UIViewController{
         
     }
     
+    
     func makeConstraints(){
         searchBar.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
@@ -61,15 +73,43 @@ class LocationViewController: UIViewController{
 
 extension LocationViewController: UITextFieldDelegate{
     
+    //provjeri kad pocelo upisivanje filma
     func textFieldDidBeginEditing(_ textField: UITextField) {
         searchBar.isSelected()
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchBar.searchInputTextField.endEditing(true)
+        return true
+    }
+    
+    //kad je gotovo upisivanje filma, zove se ovo
+    //uzme grad iz text fielda
+    //u success dijelu :
+    // -- pospremi grad u bazu
+    // -- fetcha sve gradove nazad u array, skupa s tim novim
+    // -- reloada table view sa svim gradovima
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        city = searchBar.searchInputTextField.text
+        
+        networkService.getLocation(cityName: city!, completionHandler: { (result: Result<CityModel, RequestError>) in
+            switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let value):
+                    DispatchQueue.main.async {
+                        self.dataBaseSource.saveCity(name: self.city, lat: value.coord.lat, lon: value.coord.lon)
+                        self.cities = self.dataBaseSource.fetchCities()
+                        self.locationTable.reloadData()
+                }
+            }
+        })
+    }
 }
 
 extension LocationViewController: UITableViewDataSource{
     func numberOfSections(in tableView: UITableView) -> Int {
-        3
+        cities.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,9 +119,12 @@ extension LocationViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LocationSelectorCell.cellIdentifier, for: indexPath) as! LocationSelectorCell
         
-        cell.fillWithContent()
+        //uzima grad iz arraya gradova i puni odredenu celiju s podacima tog grada, jedino je pitanje kakav bude model
+        let city = cities[indexPath.section]
         
-        cell.selectionStyle = .none
+        cell.fillWithContent(city: city.name, lat: city.lon, lon: city.lat)
+        
+        //cell.selectionStyle = .none
         
         return cell
     }
@@ -102,6 +145,11 @@ extension LocationViewController: UITableViewDelegate{
     }
         
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            tableView.deselectRow(at: indexPath, animated: true)
+        let cityToRemove = self.cities[indexPath.section]
+        dataBaseSource.deleteCity(name: cityToRemove.name)
+        cities = dataBaseSource.fetchCities()
+        tableView.reloadData()
     }
 }
+
+

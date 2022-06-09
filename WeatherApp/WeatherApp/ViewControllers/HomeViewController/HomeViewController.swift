@@ -1,14 +1,14 @@
 import UIKit
 import SnapKit
 
-class HomeViewController: UIViewController {
-    
+class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate {
+        
     private var scrollView: UIScrollView!
     private var contentView: UIView!
     private var stackView: UIStackView!
     
     //Nikola
-    private var mainView: MainView!
+    private var mainView: MainScrollView!
     
     //current day forcats
     private var dayForcatsView: UIView!
@@ -25,10 +25,35 @@ class HomeViewController: UIViewController {
     
     //models
     private var weatherModel: WeatherModel!
+    private var allWeatherModels: [WeatherModel] = []
+    
+    //database
+    private var dataBaseSource = DataBaseSource()
+    private var cities: [CityNameModel] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        cities = dataBaseSource.fetchCities()
+        
+        let group = DispatchGroup()
+    
+        for city in cities{
+            group.enter()
+            networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let value):
+                    DispatchQueue.main.async {
+                        self.allWeatherModels.append(value)
+                        group.leave()
+                    }
+                }
+            })
+        }
+    
+        group.enter()
         networkService.getWeatherData(cityLat: 45.8131, cityLon: -15.9775, completionHandler: { (result: Result<WeatherModel, RequestError>) in
             switch result {
             case .failure(let error):
@@ -36,39 +61,28 @@ class HomeViewController: UIViewController {
             case .success(let value):
                 DispatchQueue.main.async {
                     self.weatherModel = value
-
-                    self.buildViews()
-                    self.buildConstraints()
+                    group.leave()
                 }
             }
         })
         
-        
-        
-        //Adrian
-        //to nam sluzi da spremimo lokacije grada, npr za Zagreb
-        //das ovoj funkciji ime grada (malim slovima) i ona fetcha s api-a njegove lokacije i onda bi to trebalo sve pospremiti u bazu
+        group.enter()
         networkService.getLocation(cityName: "zagreb", completionHandler: { (result: Result<CityModel, RequestError>) in
             switch result {
             case .failure(let error):
                 print(error)
             case .success(let value):
                 DispatchQueue.main.async {
-
-                    //tuj ide kod za spremanje u bazu
-
-                    // ove vrijednosti spremas u bazu
-                    // OBAVEZNO spremiti i ime grada malim slovima, npr. "zagreb" jer prek toga pristupamo kasnije
-                    //print(value.coord.lat)
-                    //print(value.coord.lon)
-                    //print("Zagreb (\(value.sys.country))")
-
+                    self.dataBaseSource.saveCity(name: "Zagreb", lat: value.coord.lat, lon: value.coord.lon)
+                    group.leave()
                 }
             }
         })
         
-        
-        
+        group.notify(queue: .main){
+            self.buildViews()
+            self.buildConstraints()
+        }
     }
     
     private func buildViews() {
@@ -107,9 +121,9 @@ class HomeViewController: UIViewController {
     
     //Nikola
     private func buildMainView() {
-        mainView = MainView()
-        mainView.backgroundColor = StyleConstants.AppColors.lightBlue
-        mainView.layer.cornerRadius = 30
+        mainView = MainScrollView(cities: cities, weathers: allWeatherModels, delegate: self)
+        mainView.cityChangedDelegate = self
+        
         stackView.addArrangedSubview(mainView)
     }
     
@@ -220,6 +234,22 @@ class HomeViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.top.equalTo(weekForcatsLabel.snp.bottom).offset(10)
         })
+    }
+    
+    func buttonTap(name: String) {
+        if(name == "Settings"){
+            let vc = SettingsViewContoller()
+            self.present(vc, animated: true, completion: nil)
+        }
+        if(name == "Location"){
+            let vc = LocationViewController()
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    func cityChanged(weatherModel: WeatherModel) {
+        self.weatherModel = weatherModel
+        dayCollectionView.reloadData()
     }
 }
 
