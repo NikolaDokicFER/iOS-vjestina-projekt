@@ -25,11 +25,12 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     
     //models
     private var weatherModel: WeatherModel!
-    private var allWeatherModels: [WeatherModel] = []
+    private var allWeatherModels = [String:WeatherModel]()
     
     //database
     private var dataBaseSource = DataBaseSource()
     private var cities: [CityNameModel] = []
+    private var group = DispatchGroup()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,24 +40,9 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     
     private func setData(first: Bool){
         cities = dataBaseSource.fetchCities()
+        allWeatherModels.removeAll()
         
-        let group = DispatchGroup()
         
-        for city in cities{
-            group.enter()
-            networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let value):
-                    DispatchQueue.main.async {
-                        self.allWeatherModels.append(value)
-                        group.leave()
-                    }
-                }
-            })
-        }
-    
         group.enter()
         networkService.getWeatherData(cityLat: 45.8131, cityLon: -15.9775, completionHandler: { (result: Result<WeatherModel, RequestError>) in
             switch result {
@@ -65,9 +51,14 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
             case .success(let value):
                 DispatchQueue.main.async {
                     self.weatherModel = value
-                    group.leave()
+                    self.allWeatherModels["Zagreb"] = value
+                    
+                    if(self.cities.count == 0){
+                        self.cities.append(CityNameModel(name: "Zagreb", lon: 45.8131, lat: -15.9775))
+                    }
                 }
             }
+            self.group.leave()
         })
         
         group.enter()
@@ -78,10 +69,28 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
             case .success(let value):
                 DispatchQueue.main.async {
                     self.dataBaseSource.saveCity(name: "Zagreb", lat: value.coord.lat, lon: value.coord.lon)
-                    group.leave()
                 }
             }
+            self.group.leave()
         })
+        
+        for city in cities{
+            if(city.name != "Zagreb"){
+                group.enter()
+                networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
+                    switch result {
+                    case .failure(let error):
+                        print(error)
+                    case .success(let value):
+                        DispatchQueue.main.async {
+                            self.allWeatherModels[city.name] = value
+                        }
+                    }
+                    self.group.leave()
+                })
+            }
+        }
+    
         
         group.notify(queue: .main){
             if(first){

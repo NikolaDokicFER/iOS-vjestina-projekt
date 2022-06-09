@@ -11,7 +11,7 @@ import UIKit
 class MainScrollView: UIView, UIScrollViewDelegate{
     
     var cityChangedDelegate: CityChangeDelegate?
-    private var weather: [WeatherModel] = []
+    private var weather = [String:WeatherModel]()
     private var city: [CityNameModel] = []
     private var pageControl: UIPageControl!
     private var scrollview: UIScrollView!
@@ -19,7 +19,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
     var frames: CGRect = CGRect(x:0, y:0, width:0, height:0)
 
     
-    init(cities: [CityNameModel], weathers: [WeatherModel], delegate: MainViewDelegate) {
+    init(cities: [CityNameModel], weathers: [String:WeatherModel], delegate: MainViewDelegate) {
         super.init(frame: CGRect.zero)
         self.city = cities
         self.weather = weathers;
@@ -62,7 +62,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
 
             self.scrollview.addSubview(mainView)
             mainView.setCity(name: city[0].name)
-            mainView.setWeather(weather: weather[0])
+            mainView.setWeather(weather: weather[city[0].name]!)
         }
         else {
             for index in 0...city.count - 1{
@@ -74,8 +74,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
 
                 self.scrollview.addSubview(mainView)
                 mainView.setCity(name: city[index].name)
-                mainView.setWeather(weather: weather[index])
-
+                mainView.setWeather(weather: weather[city[index].name]!)
             }
         }
         
@@ -94,7 +93,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         }
     }
     
-    func resetViews(cities: [CityNameModel], weathers: [WeatherModel]){
+    func resetViews(cities: [CityNameModel], weathers: [String:WeatherModel]){
         city = cities
         weather = weathers
         
@@ -112,7 +111,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
 
             scrollview.addSubview(mainView)
             mainView.setCity(name: city[0].name)
-            mainView.setWeather(weather: weather[0])
+            mainView.setWeather(weather: weather[city[0].name]!)
         }
         else {
             for index in 0...city.count - 1{
@@ -124,7 +123,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
 
                 self.scrollview.addSubview(mainView)
                 mainView.setCity(name: city[index].name)
-                mainView.setWeather(weather: weather[index])
+                mainView.setWeather(weather: weather[city[index].name]!)
 
             }
         }
@@ -140,10 +139,10 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         
         
         if (city.count == 1) {
-            cityChangedDelegate?.cityChanged(weatherModel: weather[0])
+            cityChangedDelegate?.cityChanged(weatherModel: weather[city[0].name]!)
         }
         else {
-            cityChangedDelegate?.cityChanged(weatherModel: weather[Int(pageNumber)])
+            cityChangedDelegate?.cityChanged(weatherModel: weather[city[Int(pageNumber)].name]!)
         }
     }
 }
