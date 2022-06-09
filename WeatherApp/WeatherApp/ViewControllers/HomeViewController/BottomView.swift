@@ -36,6 +36,8 @@ class BottomView: UIView{
     }
     
     private func buildViews(){
+        fetchUnits()
+        
         stackView1 = UIStackView()
         stackView1.axis = .horizontal
         stackView1.spacing = 30
@@ -44,7 +46,7 @@ class BottomView: UIView{
         
         stackView2 = UIStackView()
         stackView2.axis = .horizontal
-        stackView2.spacing = 30
+        stackView2.spacing = 40
         stackView2.distribution = .fillEqually
         self.addSubview(stackView2)
         
@@ -66,6 +68,46 @@ class BottomView: UIView{
         stackView1.addArrangedSubview(viewCell2)
 
         viewCell3 = BottomViewCell()
+        stackView2.addArrangedSubview(viewCell3)
+        
+        setUnits()
+
+        viewCell4 = BottomViewCell()
+        viewCell4.setData(image: UIImage(systemName: "drop", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.humidity)%", bottomText: "Humidity")
+        stackView2.addArrangedSubview(viewCell4)
+
+    }
+    
+    private func constraintViews(){
+        stackView1.snp.makeConstraints({
+            $0.leading.trailing.equalToSuperview().inset(46)
+            $0.top.equalToSuperview()
+            $0.height.equalTo(50)
+        })
+        
+        
+        stackView2.snp.makeConstraints({
+            $0.leading.trailing.equalToSuperview().inset(50)
+            $0.top.equalTo(stackView1.snp.bottom)
+            $0.height.equalTo(50)
+        })
+    }
+    
+    func setUnits(){
+        fetchUnits()
+        
+        let weatherDirectionImage = weatherIcons.windIcon(degree: weatherModel.current.windDeg)
+        
+        if(windsUnit == windUnit.kmh){
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) km/h", bottomText: "Wind")
+        }else if(windsUnit == windUnit.knots){
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) knots", bottomText: "Wind")
+        }else if(windsUnit == windUnit.mph){
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) mph", bottomText: "Wind")
+        }else{
+            viewCell1.setData(image: UIImage(systemName: weatherDirectionImage, withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.windSpeed) mps", bottomText: "Wind")
+        }
+        
         if(pressuresUnit == pressureUnit.atm){
             viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) atm", bottomText: "Pressure")
         }else if(pressuresUnit == pressureUnit.hpa){
@@ -77,27 +119,6 @@ class BottomView: UIView{
         }else{
             viewCell3.setData(image: UIImage(systemName: "thermometer", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.pressure) mbar", bottomText: "Pressure")
         }
-        stackView2.addArrangedSubview(viewCell3)
-
-        viewCell4 = BottomViewCell()
-        viewCell4.setData(image: UIImage(systemName: "drop", withConfiguration: UIImage.SymbolConfiguration(scale: .large))!, topText: "\(weatherModel.current.humidity)%", bottomText: "Humidity")
-        stackView2.addArrangedSubview(viewCell4)
-
-    }
-    
-    private func constraintViews(){
-        stackView1.snp.makeConstraints({
-            $0.leading.trailing.equalToSuperview().inset(45)
-            $0.top.equalToSuperview()
-            $0.height.equalTo(50)
-        })
-        
-        
-        stackView2.snp.makeConstraints({
-            $0.leading.trailing.equalToSuperview().inset(50)
-            $0.top.equalTo(stackView1.snp.bottom)
-            $0.height.equalTo(50)
-        })
     }
     
     func fetchUnits() {

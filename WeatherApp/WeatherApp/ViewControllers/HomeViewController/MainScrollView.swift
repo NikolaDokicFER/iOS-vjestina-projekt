@@ -26,7 +26,6 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         self.delegate = delegate
         
         buildViews()
-        constraintViews()
     }
     
     required init?(coder: NSCoder) {
@@ -55,7 +54,6 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         })
         
         
-        
         if (city.count == 1) {
             frames.origin.x = self.scrollview.frame.size.width * CGFloat(0)
             frames.size = self.scrollview.frame.size
@@ -67,7 +65,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
             mainView.setWeather(weather: weather[0])
         }
         else {
-            for index in 0...city.count - 2{
+            for index in 0...city.count - 1{
                 frames.origin.x = self.scrollview.frame.size.width * CGFloat(index)
                 frames.size = self.scrollview.frame.size
 
@@ -81,21 +79,64 @@ class MainScrollView: UIView, UIScrollViewDelegate{
             }
         }
         
-        self.scrollview.contentSize = CGSize(width:self.scrollview.frame.size.width * 3,height: self.scrollview.frame.size.height)
+        self.scrollview.contentSize = CGSize(width:self.scrollview.frame.size.width * CGFloat(city.count),height: self.scrollview.frame.size.height)
         
         pageControl.numberOfPages = city.count
         pageControl.currentPage = 0
         
     }
     
-    private func constraintViews(){
-       
+    func setUnits(){
+        let subViews = scrollview.subviews.compactMap{$0 as? MainView}
+        
+        for subView in subViews{
+            subView.setUnits()
+        }
+    }
+    
+    func resetViews(cities: [CityNameModel], weathers: [WeatherModel]){
+        city = cities
+        weather = weathers
+        
+        let subViews = scrollview.subviews.compactMap{$0 as? MainView}
+        
+        for subView in subViews{
+            subView.removeFromSuperview()
+        }
+        
+        if (city.count == 1) {
+            frames.origin.x = self.scrollview.frame.size.width * CGFloat(0)
+            frames.size = self.scrollview.frame.size
+            let mainView = MainView(frame: frames)
+            mainView.delegate = delegate
+
+            scrollview.addSubview(mainView)
+            mainView.setCity(name: city[0].name)
+            mainView.setWeather(weather: weather[0])
+        }
+        else {
+            for index in 0...city.count - 1{
+                frames.origin.x = self.scrollview.frame.size.width * CGFloat(index)
+                frames.size = self.scrollview.frame.size
+
+                let mainView = MainView(frame: frames)
+                mainView.delegate = delegate
+
+                self.scrollview.addSubview(mainView)
+                mainView.setCity(name: city[index].name)
+                mainView.setWeather(weather: weather[index])
+
+            }
+        }
+        
+        self.scrollview.contentSize = CGSize(width:self.scrollview.frame.size.width * CGFloat(city.count),height: self.scrollview.frame.size.height)
+        
+        pageControl.numberOfPages = city.count
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
-        
         
         
         if (city.count == 1) {

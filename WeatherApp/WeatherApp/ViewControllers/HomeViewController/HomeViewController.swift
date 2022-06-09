@@ -34,10 +34,14 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setData(first: true)
+    }
+    
+    private func setData(first: Bool){
         cities = dataBaseSource.fetchCities()
         
         let group = DispatchGroup()
-    
+        
         for city in cities{
             group.enter()
             networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
@@ -80,8 +84,12 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
         })
         
         group.notify(queue: .main){
-            self.buildViews()
-            self.buildConstraints()
+            if(first){
+                self.buildViews()
+                self.buildConstraints()
+            }else{
+                self.mainView.resetViews(cities: self.cities, weathers: self.allWeatherModels)
+            }
         }
     }
     
@@ -260,7 +268,8 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     func reloadWeatherViews() {
         dayCollectionView.reloadData()
         forecastTableView.reloadData()
-        mainView.reloadInputViews()
+        mainView.setUnits()
+        setData(first: false)
     }
 }
 
