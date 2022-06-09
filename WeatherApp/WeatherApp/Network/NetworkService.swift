@@ -13,7 +13,7 @@ protocol NetworkServiceProtocol {
 
 class NetworkService {
     
-    let weatherURL = "https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&appid=566031d788518c2392688fafaeb2caf3"
+    let weatherURL = "https://api.openweathermap.org/data/3.0/onecall?exclude=minutely&appid=a630328526139909bccfe7415c2c3c6f"
     
     func getWeatherData(cityLat: Float, cityLon: Float, completionHandler: @escaping (Result<WeatherModel, RequestError>) -> Void) {
         
@@ -32,7 +32,7 @@ class NetworkService {
     
     func getLocation(cityName: String, completionHandler: @escaping (Result<CityModel, RequestError>) -> Void) {
         
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=566031d788518c2392688fafaeb2caf3"
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(cityName)&appid=a630328526139909bccfe7415c2c3c6f"
         
         let url = URL(string: urlString)
     
