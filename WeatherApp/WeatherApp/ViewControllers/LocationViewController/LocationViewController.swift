@@ -12,6 +12,8 @@ class LocationViewController: UIViewController{
     private var dataBaseSource: DataBaseSource!
     private var city: String!
     
+    var homeVc: HomeViewController?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -83,16 +85,12 @@ extension LocationViewController: UITextFieldDelegate{
         return true
     }
     
-    //kad je gotovo upisivanje filma, zove se ovo
-    //uzme grad iz text fielda
-    //u success dijelu :
-    // -- pospremi grad u bazu
-    // -- fetcha sve gradove nazad u array, skupa s tim novim
-    // -- reloada table view sa svim gradovima
     func textFieldDidEndEditing(_ textField: UITextField) {
         city = searchBar.searchInputTextField.text
         
-        networkService.getLocation(cityName: city!, completionHandler: { (result: Result<CityModel, RequestError>) in
+        let cityReduced = city.replacingOccurrences(of: " ", with: "%20", options: .literal, range: nil)
+        
+        networkService.getLocation(cityName: cityReduced, completionHandler: { (result: Result<CityModel, RequestError>) in
             switch result {
                 case .failure(let error):
                     print(error)
@@ -101,6 +99,7 @@ extension LocationViewController: UITextFieldDelegate{
                         self.dataBaseSource.saveCity(name: self.city, lat: value.coord.lat, lon: value.coord.lon)
                         self.cities = self.dataBaseSource.fetchCities()
                         self.locationTable.reloadData()
+                        self.homeVc?.reloadWeatherViews()
                 }
             }
         })
@@ -149,6 +148,7 @@ extension LocationViewController: UITableViewDelegate{
         dataBaseSource.deleteCity(name: cityToRemove.name)
         cities = dataBaseSource.fetchCities()
         tableView.reloadData()
+        homeVc?.reloadWeatherViews()
     }
 }
 

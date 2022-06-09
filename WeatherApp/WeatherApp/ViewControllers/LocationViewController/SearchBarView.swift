@@ -32,7 +32,7 @@ class SearchBarView: UIView {
         closeCrossButton.tintColor = UIColor(red: 0.043, green: 0.145, blue: 0.247, alpha: 1)
                 
         let customSearch = NSAttributedString(string: "Search",
-                                              attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 18) as Any])
+                                              attributes: [NSAttributedString.Key.font : UIFont(name: StyleConstants.FontNames.normalFont, size: 18) as Any])
                 
         searchInputTextField.attributedPlaceholder = customSearch
         searchInputTextField.rightView = closeCrossButton

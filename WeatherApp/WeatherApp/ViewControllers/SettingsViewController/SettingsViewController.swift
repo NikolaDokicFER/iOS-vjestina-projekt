@@ -12,12 +12,15 @@ class SettingsViewContoller: UIViewController{
     let lineBreak = UIView()
     let extraLabel = UILabel()
     let aboutLabel = UILabel()
+    let aboutButton = UIButton()
     let temperatureArray: [temperatureUnit] = [.C, .F]
     let windArray: [windUnit] = [.kmh, .mph, .mps, .knots]
     let pressureArray: [pressureUnit] = [.atm, .hpa, .inhg, .mbar, .mmhg]
     var loadingTemp: temperatureUnit?
     var loadingWind: windUnit?
     var loadingPressure: pressureUnit?
+    
+    var homeVc: HomeViewController?
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -43,41 +46,41 @@ class SettingsViewContoller: UIViewController{
         navigationItem.title = "Settings"
         
         unitLabel.text = "UNIT"
-        unitLabel.font = UIFont.systemFont(ofSize: 14)
+        unitLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 14)
         unitLabel.textColor = .white
         view.addSubview(unitLabel)
         
         temperatureLabel.text = "Temperature unit"
-        temperatureLabel.font = UIFont.systemFont(ofSize: 20)
+        temperatureLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
         temperatureLabel.textColor = .white
         view.addSubview(temperatureLabel)
         
         temperatureButton.setTitle(loadingTemp?.rawValue, for: .normal)
-        temperatureButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        temperatureButton.titleLabel?.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
         temperatureButton.backgroundColor = .clear
         temperatureButton.titleLabel?.textColor = .black
         temperatureButton.addTarget(self, action: #selector(toggleTemperature(sender:)), for: .touchUpInside)
         view.addSubview(temperatureButton)
         
         windLabel.text = "Wind unit"
-        windLabel.font = UIFont.systemFont(ofSize: 20)
+        windLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
         windLabel.textColor = .white
         view.addSubview(windLabel)
         
         windButton.setTitle(loadingWind?.rawValue, for: .normal)
-        windButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        windButton.titleLabel?.font = UIFont(name: StyleConstants.FontNames.boldFont, size: 20)
         windButton.backgroundColor = .clear
         windButton.titleLabel?.textColor = .black
         windButton.addTarget(self, action: #selector(toggleWind(sender:)), for: .touchUpInside)
         view.addSubview(windButton)
         
         atmosphereLabel.text = "Atmospheric pressure unit"
-        atmosphereLabel.font = UIFont.systemFont(ofSize: 20)
+        atmosphereLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
         atmosphereLabel.textColor = .white
         view.addSubview(atmosphereLabel)
         
         atmosphereButton.setTitle(loadingPressure?.rawValue, for: .normal)
-        atmosphereButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        atmosphereButton.titleLabel?.font = UIFont(name: StyleConstants.FontNames.boldFont, size: 20)
         atmosphereButton.backgroundColor = .clear
         atmosphereButton.titleLabel?.textColor = .yellow
         atmosphereButton.addTarget(self, action: #selector(togglePressure(sender:)), for: .touchUpInside)
@@ -87,14 +90,16 @@ class SettingsViewContoller: UIViewController{
         view.addSubview(lineBreak)
         
         extraLabel.text = "EXTRA"
-        extraLabel.font = UIFont.systemFont(ofSize: 14)
+        extraLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 14)
         extraLabel.textColor = .white
         view.addSubview(extraLabel)
         
         aboutLabel.text = "About"
-        aboutLabel.font = UIFont.systemFont(ofSize: 20)
+        aboutLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
         aboutLabel.textColor = .white
         view.addSubview(aboutLabel)
+        
+        
         
     }
     
@@ -230,6 +235,7 @@ class SettingsViewContoller: UIViewController{
         } catch {
             print("Error when encoding SettingsModel")
         }
+        homeVc?.reloadWeatherViews()
     }
     
     func fetchUnits() {
@@ -245,5 +251,6 @@ class SettingsViewContoller: UIViewController{
         } catch {
             print("Error when decoding SettingsModel")
         }
+        homeVc?.reloadWeatherViews()
     }
 }

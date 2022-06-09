@@ -8,17 +8,17 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     private var stackView: UIStackView!
     
     //Nikola
-    private var mainView: MainScrollView!
+    var mainView: MainScrollView!
     
-    //current day forcats
-    private var dayForcatsView: UIView!
+    //current day forecast
+    private var dayForecastView: UIView!
     private var dayAndDateLabel: UILabel!
-    private var dayCollectionView: UICollectionView!
+    var dayCollectionView: UICollectionView!
 
-    //seven day forcats
-    private var weekForcatsView: UIView!
-    private var weekForcatsLabel: UILabel!
-    private var forcatsTableView: UITableView!
+    //seven day forecast
+    private var weekForecastView: UIView!
+    private var weekForecastLabel: UILabel!
+    var forecastTableView: UITableView!
     
     //network
     private var networkService = NetworkService()
@@ -128,16 +128,17 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     }
     
     private func buildDayForcatsView() {
-        dayForcatsView = UIView()
-        dayForcatsView.backgroundColor = StyleConstants.AppColors.lightBlue
-        stackView.addArrangedSubview(dayForcatsView)
+        dayForecastView = UIView()
+        dayForecastView.backgroundColor = StyleConstants.AppColors.lightBlue
+        dayForecastView.layer.cornerRadius = 25
+        stackView.addArrangedSubview(dayForecastView)
         
         dayAndDateLabel = UILabel()
         dayAndDateLabel.textColor = StyleConstants.AppColors.textColor
         dayAndDateLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
         
-        dayAndDateLabel.text = "Forcats for 24 Hours"
-        dayForcatsView.addSubview(dayAndDateLabel)
+        dayAndDateLabel.text = "Forecast for 24 Hours"
+        dayForecastView.addSubview(dayAndDateLabel)
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -147,31 +148,32 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
         dayCollectionView.backgroundColor = .clear
         dayCollectionView.bounces = false
         dayCollectionView.showsHorizontalScrollIndicator = false
-        dayForcatsView.addSubview(dayCollectionView)
+        dayForecastView.addSubview(dayCollectionView)
         
         dayCollectionView.delegate = self
         dayCollectionView.dataSource = self
     }
     
     private func buildWeekForcatsView() {
-        weekForcatsView = UIView()
-        weekForcatsView.backgroundColor = StyleConstants.AppColors.lightBlue
-        stackView.addArrangedSubview(weekForcatsView)
+        weekForecastView = UIView()
+        weekForecastView.backgroundColor = StyleConstants.AppColors.lightBlue
+        weekForecastView.layer.cornerRadius = 25
+        stackView.addArrangedSubview(weekForecastView)
         
-        weekForcatsLabel = UILabel()
-        weekForcatsLabel.textColor = StyleConstants.AppColors.textColor
-        weekForcatsLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
-        weekForcatsLabel.text = "Forcats for 7 Days"
-        weekForcatsView.addSubview(weekForcatsLabel)
+        weekForecastLabel = UILabel()
+        weekForecastLabel.textColor = StyleConstants.AppColors.textColor
+        weekForecastLabel.font = UIFont(name: StyleConstants.FontNames.boldFont, size: StyleConstants.TextSizes.textNormal)
+        weekForecastLabel.text = "Forecast for 7 Days"
+        weekForecastView.addSubview(weekForecastLabel)
         
-        forcatsTableView = UITableView()
-        forcatsTableView.register(ForcatsTableViewCell.self, forCellReuseIdentifier: ForcatsTableViewCell.reuseIdentifier)
-        forcatsTableView.rowHeight = 60
-        forcatsTableView.isUserInteractionEnabled = false
-        forcatsTableView.separatorColor = .clear
-        weekForcatsView.addSubview(forcatsTableView)
+        forecastTableView = UITableView()
+        forecastTableView.register(ForcatsTableViewCell.self, forCellReuseIdentifier: ForcatsTableViewCell.reuseIdentifier)
+        forecastTableView.rowHeight = 60
+        forecastTableView.isUserInteractionEnabled = false
+        forecastTableView.separatorColor = .clear
+        weekForecastView.addSubview(forecastTableView)
         
-        forcatsTableView.dataSource = self
+        forecastTableView.dataSource = self
     }
     
     //MARK: - Constraints
@@ -201,8 +203,8 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     }
     
     private func dayForcatsViewConstraints() {
-        dayForcatsView.snp.makeConstraints({
-            $0.width.equalToSuperview()
+        dayForecastView.snp.makeConstraints({
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(140)
         })
         
@@ -219,30 +221,32 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     }
     
     private func weekForcatsViewConstraints() {
-        weekForcatsView.snp.makeConstraints({
-            $0.width.equalToSuperview()
+        weekForecastView.snp.makeConstraints({
+            $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(420+14+10*3)
         })
         
-        weekForcatsLabel.snp.makeConstraints({
+        weekForecastLabel.snp.makeConstraints({
             $0.top.equalToSuperview().inset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
         })
         
-        forcatsTableView.snp.makeConstraints({
+        forecastTableView.snp.makeConstraints({
             $0.bottom.equalToSuperview().inset(10)
             $0.leading.trailing.equalToSuperview().inset(20)
-            $0.top.equalTo(weekForcatsLabel.snp.bottom).offset(10)
+            $0.top.equalTo(weekForecastLabel.snp.bottom).offset(10)
         })
     }
     
     func buttonTap(name: String) {
         if(name == "Settings"){
             let vc = SettingsViewContoller()
+            vc.homeVc = self
             self.present(vc, animated: true, completion: nil)
         }
         if(name == "Location"){
             let vc = LocationViewController()
+            vc.homeVc = self
             self.present(vc, animated: true, completion: nil)
         }
     }
@@ -250,6 +254,13 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     func cityChanged(weatherModel: WeatherModel) {
         self.weatherModel = weatherModel
         dayCollectionView.reloadData()
+        forecastTableView.reloadData()
+    }
+    
+    func reloadWeatherViews() {
+        dayCollectionView.reloadData()
+        forecastTableView.reloadData()
+        mainView.reloadInputViews()
     }
 }
 
@@ -260,20 +271,8 @@ extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y == 0 {
             
-            networkService.getWeatherData(cityLat: 55.7522, cityLon: 37.6156, completionHandler: { (result: Result<WeatherModel, RequestError>) in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let value):
-                    DispatchQueue.main.async {
-                        self.weatherModel = value
-
-                        self.dayCollectionView.reloadData()
-                        self.forcatsTableView.reloadData()
-                    }
-                }
-            })
-            
+            dayCollectionView.reloadData()
+            forecastTableView.reloadData()
         }
     }
 }

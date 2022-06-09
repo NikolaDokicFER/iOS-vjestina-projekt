@@ -54,21 +54,34 @@ class MainScrollView: UIView, UIScrollViewDelegate{
             $0.centerX.equalToSuperview()
         })
         
-        for index in 0...city.count - 1{
-            frames.origin.x = self.scrollview.frame.size.width * CGFloat(index)
+        
+        
+        if (city.count == 1) {
+            frames.origin.x = self.scrollview.frame.size.width * CGFloat(0)
             frames.size = self.scrollview.frame.size
-            
             let mainView = MainView(frame: frames)
             mainView.delegate = delegate
-            
+
             self.scrollview.addSubview(mainView)
-            mainView.setCity(name: city[index].name)
-            mainView.setWeather(weather: weather[index])
-            
+            mainView.setCity(name: city[0].name)
+            mainView.setWeather(weather: weather[0])
+        }
+        else {
+            for index in 0...city.count - 2{
+                frames.origin.x = self.scrollview.frame.size.width * CGFloat(index)
+                frames.size = self.scrollview.frame.size
+
+                let mainView = MainView(frame: frames)
+                mainView.delegate = delegate
+
+                self.scrollview.addSubview(mainView)
+                mainView.setCity(name: city[index].name)
+                mainView.setWeather(weather: weather[index])
+
+            }
         }
         
         self.scrollview.contentSize = CGSize(width:self.scrollview.frame.size.width * 3,height: self.scrollview.frame.size.height)
-
         
         pageControl.numberOfPages = city.count
         pageControl.currentPage = 0
@@ -83,7 +96,14 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
         
-        cityChangedDelegate?.cityChanged(weatherModel: weather[Int(pageNumber)])
+        
+        
+        if (city.count == 1) {
+            cityChangedDelegate?.cityChanged(weatherModel: weather[0])
+        }
+        else {
+            cityChangedDelegate?.cityChanged(weatherModel: weather[Int(pageNumber)])
+        }
     }
 }
 
