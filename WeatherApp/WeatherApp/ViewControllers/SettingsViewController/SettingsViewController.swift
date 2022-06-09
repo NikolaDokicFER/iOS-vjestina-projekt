@@ -11,7 +11,6 @@ class SettingsViewContoller: UIViewController{
     let atmosphereButton = UIButton()
     let lineBreak = UIView()
     let extraLabel = UILabel()
-    let aboutLabel = UILabel()
     let aboutButton = UIButton()
     let temperatureArray: [temperatureUnit] = [.C, .F]
     let windArray: [windUnit] = [.kmh, .mph, .mps, .knots]
@@ -21,6 +20,8 @@ class SettingsViewContoller: UIViewController{
     var loadingPressure: pressureUnit?
     
     var homeVc: HomeViewController?
+    
+    private var addAlertView: UIAlertController!
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -94,12 +95,11 @@ class SettingsViewContoller: UIViewController{
         extraLabel.textColor = .white
         view.addSubview(extraLabel)
         
-        aboutLabel.text = "About"
-        aboutLabel.font = UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
-        aboutLabel.textColor = .white
-        view.addSubview(aboutLabel)
-        
-        
+        aboutButton.setTitle("About", for: .normal)
+        aboutButton.titleLabel?.font =  UIFont(name: StyleConstants.FontNames.normalFont, size: 20)
+        aboutButton.addTarget(self, action: #selector(aboutTap), for: .touchUpInside)
+        aboutButton.tintColor = .white
+        view.addSubview(aboutButton)
         
     }
     
@@ -151,10 +151,18 @@ class SettingsViewContoller: UIViewController{
             $0.leading.equalTo(lineBreak)
         }
         
-        aboutLabel.snp.makeConstraints{
+        aboutButton.snp.makeConstraints{
             $0.top.equalTo(extraLabel.snp.bottom).offset(20)
             $0.leading.equalTo(extraLabel)
         }
+    }
+    
+    @objc func aboutTap() {
+        let message: String = "WeatherApp made by:\n\nĐokić Nikola\nMikulić Jurica\nSušec Adrian"
+        addAlertView = UIAlertController(title: "About", message: message, preferredStyle: UIAlertController.Style.alert)
+        addAlertView.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: nil))
+
+        self.present(addAlertView, animated: true, completion: nil)
     }
     
     @objc
