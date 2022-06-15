@@ -39,61 +39,33 @@ class HomeViewController: UIViewController, MainViewDelegate, CityChangeDelegate
     }
     
     private func setData(first: Bool){
-        cities = dataBaseSource.fetchCities()
         allWeatherModels.removeAll()
+        cities = dataBaseSource.fetchCities()
         
-        
-        group.enter()
-        networkService.getWeatherData(cityLat: 45.8131, cityLon: -15.9775, completionHandler: { (result: Result<WeatherModel, RequestError>) in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let value):
-                DispatchQueue.main.async {
-                    self.weatherModel = value
-                    self.allWeatherModels["Zagreb"] = value
-                    
-                    if(self.cities.count == 0){
-                        self.cities.append(CityNameModel(name: "Zagreb", lon: 45.8131, lat: -15.9775))
-                    }
-                }
-            }
-            self.group.leave()
-        })
-        
-        group.enter()
-        networkService.getLocation(cityName: "zagreb", completionHandler: { (result: Result<CityModel, RequestError>) in
-            switch result {
-            case .failure(let error):
-                print(error)
-            case .success(let value):
-                DispatchQueue.main.async {
-                    self.dataBaseSource.saveCity(name: "Zagreb", lat: value.coord.lat, lon: value.coord.lon)
-                }
-            }
-            self.group.leave()
-        })
+        if(cities.isEmpty){
+            dataBaseSource.saveCity(name: "Zagreb", lat: 45.8131, lon: 15.9775)
+            cities = dataBaseSource.fetchCities()
+        }
         
         for city in cities{
-            if(city.name != "Zagreb"){
-                group.enter()
-                networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
-                    switch result {
-                    case .failure(let error):
-                        print(error)
-                    case .success(let value):
-                        DispatchQueue.main.async {
-                            self.allWeatherModels[city.name] = value
-                        }
+            group.enter()
+            networkService.getWeatherData(cityLat: city.lat, cityLon: city.lon, completionHandler: { (result: Result<WeatherModel, RequestError>) in
+                switch result {
+                case .failure(let error):
+                    print(error)
+                case .success(let value):
+                    DispatchQueue.main.async {
+                        self.allWeatherModels[city.name] = value
                     }
-                    self.group.leave()
-                })
-            }
+                }
+                self.group.leave()
+            })
         }
     
         
         group.notify(queue: .main){
             if(first){
+                self.weatherModel = self.allWeatherModels["Zagreb"]
                 self.buildViews()
                 self.buildConstraints()
             }else{

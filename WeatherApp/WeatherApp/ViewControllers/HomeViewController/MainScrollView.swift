@@ -40,6 +40,7 @@ class MainScrollView: UIView, UIScrollViewDelegate{
         scrollview.isPagingEnabled = true
         scrollview.translatesAutoresizingMaskIntoConstraints = false
         scrollview.bounces = false
+        scrollview.showsHorizontalScrollIndicator = false
         
         scrollview.snp.makeConstraints({
             $0.top.bottom.leading.trailing.equalToSuperview()
